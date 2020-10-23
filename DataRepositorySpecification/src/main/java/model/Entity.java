@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Entity {
 
-    private String name;
+    private String type;
     private String id;
     private Map<String, String> attributes;
 
@@ -13,13 +13,13 @@ public class Entity {
         this.attributes = new HashMap<>();
         //TODO autoincrement id
         this.id = "";
-        this.name = "";
+        this.type = "";
     }
 
     public Entity(String id , String name) {
         this.attributes = new HashMap<>();
         this.id = id;
-        this.name = name;
+        this.type = name;
     }
 
     public String getId() { return id; }
@@ -34,7 +34,7 @@ public class Entity {
 
     public void setAttributes(Map<String, String> attributes) { this.attributes = attributes; }
 
-    public String getName() { return name; }
+    public String getType() { return type; }
 
-    public void setName(String name) { this.name = name; }
+    public void setType(String name) { this.type = name; }
 }
