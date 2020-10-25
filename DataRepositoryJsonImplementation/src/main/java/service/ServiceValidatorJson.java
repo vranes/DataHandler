@@ -2,14 +2,13 @@ package service;
 
 import utils.JsonValidationUtils;
 
-public class ServiceValidatorJSON implements IServiceValidator {
+public class ServiceValidatorJson implements IServiceValidator {
 
-    private static ServiceValidatorJSON instance;
+    private static ServiceValidatorJson instance;
 
-    // Singleton pattern
-    public synchronized static ServiceValidatorJSON get() {
+    public synchronized static ServiceValidatorJson get() {
         if (instance == null)
-            instance = new ServiceValidatorJSON();
+            instance = new ServiceValidatorJson();
         return instance;
     }
 

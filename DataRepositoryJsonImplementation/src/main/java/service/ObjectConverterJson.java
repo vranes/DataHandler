@@ -5,19 +5,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 
-public class ObjectConverterJSON implements IObjectConverter {
+public class ObjectConverterJson implements IObjectConverter {
 
-    private static ObjectConverterJSON instance;
+    private static ObjectConverterJson instance;
     private Gson gson = new Gson();
 
-    public synchronized static ObjectConverterJSON get() {
+    public synchronized static ObjectConverterJson get() {
         if (instance == null)
-            instance = new ObjectConverterJSON();
+            instance = new ObjectConverterJson();
         return instance;
     }
 
     @Override
-    public String convertObjectToFormat(Object object) throws Exception {
+    public String objectToFormat(Object object) throws Exception {
         String jsonString = gson.toJson(object);
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -29,7 +29,7 @@ public class ObjectConverterJSON implements IObjectConverter {
     }
 
     @Override
-    public Object convertFormatToObject(String json, Class<?> classOf) throws Exception {
+    public Object formatToObject(String json, Class<?> classOf) throws Exception {
         return gson.fromJson(json, classOf);
     }
 

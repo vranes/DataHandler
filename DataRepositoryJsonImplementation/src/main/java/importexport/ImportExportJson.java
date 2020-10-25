@@ -10,6 +10,14 @@ import java.io.IOException;
 
 
 public class ImportExportJson implements IImportExport {
+    
+    private static ImportExportJson instance = null;
+    
+    public static IImportExport getInstance(){           // TODO da li da bude instanca interfejsa
+        if (instance == null)
+            instance = new ImportExportJson();
+        return instance;
+    }
 
     public String importFile(String sourcePath) throws IOException {
         String jsonString = FileUtils.fileToString(sourcePath);
