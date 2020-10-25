@@ -2,17 +2,26 @@ package service;
 
 import model.Entity;
 
+import javax.xml.crypto.Data;
+import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Database {
+public class Database {
 
-    protected int maxEntities;        // maksimalan broj entiteta po fajlu
-    protected int filesNum;           // broj fajlova trenutne baze
-    protected List<Entity> entities;   // lista svih entiteta cele baze (ili trenutnog fajla ? zavisi od implementacije)
+    private int maxEntities;        // maksimalan broj entiteta po fajlu
+    private int filesNum;           // broj fajlova trenutne baze
+    private List<Entity> entities;   // lista svih entiteta cele baze (ili trenutnog fajla ? zavisi od implementacije)
 
-    // ova metoda treba da pri pokretanju ucita sve iz cele odabrane baze, fajl po fajl
-    // svaki entitet da pretvori u <Entity> objekat i da ih sacuva u listi entiteta
-    public abstract void load(String filePath);
+    private static Database instance = null;
+    private Database(){
+        filesNum = 0;
+        entities = new ArrayList<>();
+    }
+    public static Database getInstance(){
+        if (instance == null)
+            instance = new Database();
+        return instance;
+    }
 
     public void setMaxEntities(int maxEntities) { this.maxEntities = maxEntities; }
 

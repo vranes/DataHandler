@@ -8,7 +8,7 @@ import java.util.Map;
 public interface IStorage {
 
     // Ideja je da ovde budu metode za CRUD operacije i filtriranje
-    // Koje ce da pozivaju metode Database-a (u njemu je lista svih entiteta i samo najosnovnije metode)
+    // Koje ce da barataju Database-om (u njemu je lista svih entiteta i samo najosnovnije metode)
 
     // Nalupala sam metode za pocetak, izmeni/dodaj sta god ali da bude univerzalno korisceno u aplikaciji
     public void save (Entity entity);
