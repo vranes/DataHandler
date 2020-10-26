@@ -12,5 +12,5 @@ public interface IImportExport {
     // koristicemo je na pocetku da procitamo fajl po fajl celu bazu a i kada nam treba neki odredjeni fajl
     List<Entity> importFileEntities(String sourcePath) throws IOException;
     String importFileString (String sourcePath) throws IOException;
-    void exportFile(String destinationPath, String json) throws IOException;
+    void exportFile(String destinationPath, String data) throws IOException;
 }

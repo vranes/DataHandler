@@ -12,7 +12,7 @@ public interface IStorage {
 
     // Nalupala sam metode za pocetak, izmeni/dodaj sta god ali da bude univerzalno korisceno u aplikaciji
     public void add (String path, Entity entity) throws Exception;  // TODO generisanje vs zadavanje ID-ja?
-    public void add (String path, String id, String name, Map<String, String> map) throws Exception;
+    public void add (String path, String id, String name, Map<String, String> attributes, Map<String, Entity> nestedEntities) throws Exception;
 
     public <T> T findById(String path, String id, String type);
     public <T> T findById(String path, String id);
