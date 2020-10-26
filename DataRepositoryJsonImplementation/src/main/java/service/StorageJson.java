@@ -32,32 +32,16 @@ public class StorageJson implements IStorage {
     }
 
     @Override
-    public <T> T findById(String path, String id, String type) {
+    public Entity findByIdLocal(String id) {
+        for (Entity e: Database.getInstance().getEntities()){
+            if (e.getId().equals(id))
+                return e;
+        }
         return null;
     }
 
     @Override
-    public <T> T findById(String path, String id) {
-        return null;
-    }
-
-    @Override
-    public <T> List<T> findByType(String path, String type) {
-        return null;
-    }
-
-    @Override
-    public <T> T findByIdLocal(String id, String type) {
-        return null;
-    }
-
-    @Override
-    public <T> T findByIdLocal(String id) {
-        return null;
-    }
-
-    @Override
-    public <T> List<T> findByTypeLocal(String type) {
+    public List<Entity> findByTypeLocal(String type) {
         return null;
     }
 }

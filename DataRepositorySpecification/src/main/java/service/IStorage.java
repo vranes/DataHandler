@@ -14,13 +14,12 @@ public interface IStorage {
     public void add (String path, Entity entity) throws Exception;  // TODO generisanje vs zadavanje ID-ja?
     public void add (String path, String id, String name, Map<String, String> attributes, Map<String, Entity> nestedEntities) throws Exception;
 
-    public <T> T findById(String path, String id, String type);
+    // probaj da koristis ove metode a ne ove ispod, pretrazujemo listu entiteta iz Database-a
+    public Entity findByIdLocal(String id);
+    public List<Entity> findByTypeLocal(String type);
+
+    /*
     public <T> T findById(String path, String id);
     public <T> List<T> findByType(String path, String type);
-
-    // nisam sigurna da li cemo pretrazivati fajlove ili ucitati u aplikaciju sve pa pretrazivati objekte
-    public <T> T findByIdLocal(String id, String type);
-    public <T> T findByIdLocal(String id);
-    public <T> List<T> findByTypeLocal(String type);
-
+    */
 }
