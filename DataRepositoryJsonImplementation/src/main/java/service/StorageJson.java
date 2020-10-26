@@ -1,38 +1,30 @@
 package service;
 
+import importexport.ImportExportJson;
 import model.Entity;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class StorageJson implements IStorage {
-    @Override
-    public void save(Entity entity) {
 
+    @Override
+    public void add (String path, Entity entity) throws Exception {
+        Database.getInstance().addEntity(entity);
+        int fileNo = Database.getInstance().getNumberOfEntities() / Database.getInstance().getMaxEntities();
+
+        path += Integer.toString(fileNo);
+
+        String fileString = ImportExportJson.getInstance().importFileString(path);
+        String entityString = ObjectConverterJson.getInstance().objectToFormat(entity);
+        fileString = fileString + entityString;
     }
 
-    @Override
-    public void save(List<Entity> entities) {
-
-    }
 
     @Override
-    public void save(String id, String name, Map<String, String> map) {
-
-    }
-
-    @Override
-    public void save(String path, Entity entity) {
-
-    }
-
-    @Override
-    public void save(String path, List<Entity> entities) {
-
-    }
-
-    @Override
-    public void save(String path, String id, String name, Map<String, String> map) {
+    public void add (String path, String id, String name, Map<String, String> map) throws Exception {
 
     }
 

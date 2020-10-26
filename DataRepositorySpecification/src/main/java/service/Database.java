@@ -37,6 +37,8 @@ public class Database {
 
     public void setEntities(List<Entity> entities) { this.entities = entities; }
 
+    public int getNumberOfEntities() { return entities.size(); }
+
 }
 
 
