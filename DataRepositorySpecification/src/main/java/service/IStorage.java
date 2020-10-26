@@ -13,6 +13,9 @@ public interface IStorage {
     public void add (String path, Entity entity) throws Exception;  // TODO generisanje vs zadavanje ID-ja?
     public void add (String path, String id, String name, Map<String, String> attributes, Map<String, Entity> nestedEntities) throws Exception;
 
+    public void delete(String path, Entity entity);
+    public void delete(String path, String id);
+
     // probaj da koristis ove metode a ne ove ispod, pretrazujemo listu entiteta iz Database-a
     public Entity findById(String id);
     public List<Entity> findByType(String type);
