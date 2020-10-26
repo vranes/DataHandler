@@ -24,8 +24,11 @@ public class StorageJson implements IStorage {
 
 
     @Override
-    public void add (String path, String id, String name, Map<String, String> map) throws Exception {
-
+    public void add (String path, String id, String name, Map<String, String> attributes, Map<String, Entity> nestedEntities) throws Exception {
+        Entity entity = new Entity(id, name);
+        entity.setAttributes(attributes);
+        entity.setNestedEntities(nestedEntities);
+        add(path, entity);
     }
 
     @Override

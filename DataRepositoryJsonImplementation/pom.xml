@@ -48,7 +48,7 @@
 
         <dependency>
             <groupId>com.SK</groupId>
-            <artifactId>DataRepositoryJsonSpecification</artifactId>
+            <artifactId>DataRepositorySpecification</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
