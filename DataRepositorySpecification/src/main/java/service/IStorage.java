@@ -9,9 +9,11 @@ public interface IStorage {
     // Ideja je da ovde budu metode za CRUD operacije i filtriranje
     // Koje ce da barataju Database-om (u njemu je lista svih entiteta i samo najosnovnije metode)
 
+    public List<Entity> read (String path);
+    public List<Entity> readAll (String path);
     // Nalupala sam metode za pocetak, izmeni/dodaj sta god ali da bude univerzalno korisceno u aplikaciji
-    public void add (String path, Entity entity) throws Exception;  // TODO generisanje vs zadavanje ID-ja?
-    public void add (String path, String id, String name, Map<String, String> attributes, Map<String, Entity> nestedEntities) throws Exception;
+    public void add (String path, Entity entity);  // TODO generisanje vs zadavanje ID-ja?
+    public void add (String path, String id, String name, Map<String, String> attributes, Map<String, Entity> nestedEntities);
 
     public void delete(String path, Entity entity);
     public void delete(String path, String id);
