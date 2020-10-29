@@ -22,19 +22,29 @@ public class ImportExportYaml implements IImportExport {
 
     private static ImportExportYaml instance = null;
 
-    public static IImportExport getInstance(){           // TODO da li da bude instanca interfejsa
+    public static IImportExport getInstance(){
         if (instance == null)
             instance = new ImportExportYaml();
         return instance;
     }
 
     @Override
-    public String importFile(String sourcePath) throws IOException {
+    public String importFile(String sourcePath) {
         return null;
     }
 
     @Override
-    public void exportFile(String destinationPath, String data) throws IOException {
+    public List<Entity> importEntities(String sourcePath) {
+        return null;
+    }
+
+    @Override
+    public void exportFile(String destinationPath, String data)  {
+
+    }
+
+    @Override
+    public void exportFile(String destinationPath, List<Entity> entities) {
 
     }
 
