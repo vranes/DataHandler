@@ -28,6 +28,16 @@ public class ObjectConverterJson implements IObjectConverter {
         return formattedJson;
     }
 
+    public JsonNode objectToNode(Object object) throws Exception {
+        String jsonString = gson.toJson(object);
+//TODO pitati da li implementacija sme da ima nenasledjene metode u implementiranom interfejsu
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+        JsonNode node = objectMapper.readTree(jsonString);
+
+        return node;
+    }
+
     @Override
     public Object formatToObject(String json, Class<?> classOf) throws Exception {
         return gson.fromJson(json, classOf);

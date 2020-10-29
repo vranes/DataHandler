@@ -61,6 +61,12 @@
             <systemPath>${basedir}/lib/json-schema-validator-2.2.6-lib.jar</systemPath>
         </dependency>
 
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.11.2</version>
+        </dependency>
+
     </dependencies>
 
 

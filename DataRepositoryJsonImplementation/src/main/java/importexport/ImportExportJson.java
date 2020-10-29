@@ -24,21 +24,10 @@ public class ImportExportJson implements IImportExport {
             instance = new ImportExportJson();
         return instance;
     }
-
+/*
     public List<Entity> importFileEntities (String sourcePath) throws IOException {
         List<Entity> entities = new ArrayList<>();
         IImportExport importExport = ImportExportJson.getInstance();
-
-/*
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(file);
-        String color = jsonNode.
-
-        List<Car> listCar = objectMapper.readValue(jsonCarArray, new TypeReference<List<Car>>(){}); // za json array
-
-        Map<String, Object> map
-                = objectMapper.readValue(json, new TypeReference<Map<String,Object>>(){});
-*/
         try {
             JsonReader jr = new JsonReader(new FileReader(sourcePath));
             while (jr.peek() == JsonToken.BEGIN_OBJECT) {
@@ -72,9 +61,20 @@ public class ImportExportJson implements IImportExport {
             e.printStackTrace();
         }
         return entities;
-    }
+    } */
 
-    public String importFileString (String sourcePath) throws IOException {
+/*
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(file);
+        String color = jsonNode.
+
+        List<Car> listCar = objectMapper.readValue(jsonCarArray, new TypeReference<List<Car>>(){}); // za json array
+
+        Map<String, Object> map
+                = objectMapper.readValue(json, new TypeReference<Map<String,Object>>(){});
+*/
+
+    public String importFile(String sourcePath) throws IOException {
         String jsonString = FileUtils.fileToString(sourcePath);
 
         return beautifyJson(jsonString);
