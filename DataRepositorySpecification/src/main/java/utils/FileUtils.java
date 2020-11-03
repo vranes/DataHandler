@@ -13,19 +13,33 @@ public class FileUtils {
 
     public static String fileToString(String filePath) {
         StringBuilder contentBuilder = new StringBuilder();
-        File file = new File("");
-
-        try (Stream<String> stream = Files.lines(Paths.get(file.getAbsolutePath() + filePath),
-                StandardCharsets.UTF_8)) {
-            stream.forEach(s -> contentBuilder.append(s).append("\n"));
-        } catch (IOException e) {
-            e.printStackTrace();
+        String absolutePath = new File("").getAbsolutePath() + filePath;
+        File file = new File(absolutePath);
+        file.setReadable(true);
+        if(file.exists()){
+            try (Stream<String> stream = Files.lines(Paths.get(absolutePath),
+                    StandardCharsets.UTF_8)) {
+                stream.forEach(s -> contentBuilder.append(s).append("\n"));
+                return contentBuilder.toString();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-
-        return contentBuilder.toString();
+        else {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return new String();
     }
 
-    public static void stringToFile(File file, String data) {
+    public static void stringToFile(String filePath, String data) {
+
+        String absolutePath = new File("").getAbsolutePath() + filePath;
+        File file = new File(absolutePath);
+        file.setWritable(true);
 
         try (FileOutputStream fos = new FileOutputStream(file);
              BufferedOutputStream bos = new BufferedOutputStream(fos)) {
