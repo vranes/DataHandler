@@ -14,6 +14,6 @@ public interface IImportExport {
     String importFile (String sourcePath);
     List<Entity> importEntities (String sourcePath);
     void exportFile (String destinationPath, String data);
-    void exportFile (String destinationPath, List<Entity> entities);
+    void exportEntities (String destinationPath, List<Entity> entities);
 
 }
