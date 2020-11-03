@@ -24,7 +24,6 @@
         <module>DataRepositorySpecification</module>
         <module>DataRepositoryJsonImplementation</module>
         <module>DataRepositoryYamlImplementation</module>
-        <module>untitled</module>
     </modules>
     <name>DataRepository</name>
     <description>Nikolina Vranes i Ilija Pavlovic</description>
