@@ -15,6 +15,7 @@ public class Database {
     private static Database instance = null;
     private Database(){
         filesNum = 0;
+        maxEntities = 10;
         entities = new ArrayList<>();
     }
     public static Database getInstance(){

@@ -46,4 +46,14 @@ public class Entity {
     public void setNestedEntities(Map<String, Entity> nestedEntities) { this.nestedEntities = nestedEntities; }
 
     public void addNestedEntity (String key, Entity value) { nestedEntities.put(key, value); }
+
+    @Override
+    public String toString() {
+        return "Entity{" +
+                "type='" + type + '\'' +
+                ", id='" + id + '\'' +
+                ", attributes=" + attributes +
+                ", nestedEntities=" + nestedEntities +
+                '}';
+    }
 }

@@ -26,7 +26,7 @@ public class StorageJson extends AbstractStorage {
 
         int fileNo = Database.getInstance().getNumberOfEntities() / Database.getInstance().getMaxEntities();
         path += Integer.toString(fileNo);
-
+        System.out.println(path);
         IImportExport importExport = ImportExportJson.getInstance();
         List<Entity> entities = null;
         entities = importExport.importEntities(path);
