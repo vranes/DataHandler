@@ -10,7 +10,7 @@ public class ObjectConverterJson implements IObjectConverter {
     private static ObjectConverterJson instance;
     private Gson gson = new Gson();
 
-    public synchronized static ObjectConverterJson getInstance() {
+    public synchronized static IObjectConverter getInstance() {
         if (instance == null)
             instance = new ObjectConverterJson();
         return instance;

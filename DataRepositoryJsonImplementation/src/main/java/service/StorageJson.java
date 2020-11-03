@@ -12,6 +12,14 @@ import java.util.List;
 
 public class StorageJson extends AbstractStorage {
 
+    private static StorageJson instance = null;
+
+    public static AbstractStorage getInstance(){
+        if (instance == null)
+            instance = new StorageJson();
+        return instance;
+    }
+
     @Override
     public List<Entity> read(String path) {
         List<Entity> entities = new ArrayList<>();
