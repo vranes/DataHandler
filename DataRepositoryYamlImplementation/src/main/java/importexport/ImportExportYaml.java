@@ -21,6 +21,7 @@ import java.util.List;
 public class ImportExportYaml implements IImportExport {
 
     private static ImportExportYaml instance = null;
+    private Yaml yaml = new Yaml();
 
     public static IImportExport getInstance(){
         if (instance == null)
@@ -30,53 +31,35 @@ public class ImportExportYaml implements IImportExport {
 
     @Override
     public String importFile(String sourcePath) {
-        return null;
+        return FileUtils.fileToString(sourcePath);
     }
 
     @Override
     public List<Entity> importEntities(String sourcePath) {
-        return null;
+        List<Entity> entities = new ArrayList<>();
+        String fileString = importFile(sourcePath);
+
+        if (!fileString.isEmpty()) {
+            entities = yaml.load(fileString);
+        }
+        return entities;
+
     }
 
     @Override
     public void exportFile(String destinationPath, String data)  {
-
+        FileUtils.stringToFile(destinationPath, data);
     }
 
     @Override
     public void exportFile(String destinationPath, List<Entity> entities) {
 
-    }
+        String fileString = new String();
+        fileString = yaml.dump(entities);
 
-//    @Override
-//    public List<Entity> importFileEntities(String sourcePath) throws IOException {
-//
-//
-//        Constructor constructor = new Constructor();
-//        constructor.addTypeDescription(new TypeDescription(Entity.class));
-//
-//        Yaml yaml = new Yaml(constructor);
-//
-//// Load categories and products
-//        try (InputStream in = new FileInputStream(new File(sourcePath))) {
-//            List<Entity> entities = new ArrayList<Entity>();
-//
-//            Iterable<Object> allYamlObjects = yaml.loadAll(input);
-//
-//            for (Iterator<?> yamlObjectIterator = allYamlObjects.iterator(); yamlObjectIterator.hasNext(); ) {
-//                List<?> yamlObjects = (List<?>) yamlObjectIterator.next();
-//                for (Object yamlObject : yamlObjects) {
-//                    if (yamlObject instanceof Entity) {
-//                        entities.add((Entity) yamlObject);
-//                    }
-//                }
-//            }
-//
-//
-//            return entities;
-//        }
-//
-//    }
+        exportFile(destinationPath, fileString);
+
+    }
 
 
 }

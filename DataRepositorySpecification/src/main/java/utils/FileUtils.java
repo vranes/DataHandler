@@ -17,6 +17,7 @@ public class FileUtils {
         File file = new File(absolutePath);
         file.setReadable(true);
         if(file.exists()){
+            System.out.println(absolutePath);
             try (Stream<String> stream = Files.lines(Paths.get(absolutePath),
                     StandardCharsets.UTF_8)) {
                 stream.forEach(s -> contentBuilder.append(s).append("\n"));
@@ -27,6 +28,8 @@ public class FileUtils {
         }
         else {
             try {
+                System.out.println("gggggggg");
+
                 file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -40,7 +43,7 @@ public class FileUtils {
         String absolutePath = new File("").getAbsolutePath() + filePath;
         File file = new File(absolutePath);
         file.setWritable(true);
-
+        System.out.println(absolutePath);
         try (FileOutputStream fos = new FileOutputStream(file);
              BufferedOutputStream bos = new BufferedOutputStream(fos)) {
             // convert string to byte array
