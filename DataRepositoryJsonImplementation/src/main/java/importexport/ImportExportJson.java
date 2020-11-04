@@ -47,7 +47,7 @@ public class ImportExportJson implements IImportExport {
         FileUtils.stringToFile(destinationPath, beautifyJson(json));
     }
 
-    public void exportFile(String destinationPath, List<Entity> entities) {
+    public void exportEntities(String destinationPath, List<Entity> entities) {
 
         ObjectMapper objectMapper = new ObjectMapper();
         String fileString = new String();
