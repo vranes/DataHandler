@@ -38,7 +38,7 @@ public class StorageJson extends AbstractStorage {
         List<Entity> entities = null;
         entities = importExport.importEntities(path);
         entities.add(entity);
-        importExport.exportFile(path, entities);
+        importExport.exportEntities(path, entities);
     }
 
     @Override
