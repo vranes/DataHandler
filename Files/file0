@@ -1,0 +1,20 @@
+- !!model.Entity
+  attributes: {}
+  id: '2'
+  nestedEntities: {}
+  type: hiiiiii
+- !!model.Entity
+  attributes: {Atr2: '33', Atr1: '22'}
+  id: '1'
+  nestedEntities:
+    '1':
+      attributes: {}
+      id: '3'
+      nestedEntities: {}
+      type: nested
+  type: hello
+- !!model.Entity
+  attributes: {}
+  id: '3'
+  nestedEntities: {}
+  type: nested
