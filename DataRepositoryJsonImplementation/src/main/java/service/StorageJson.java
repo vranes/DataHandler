@@ -1,11 +1,14 @@
 package service;
 
+import Exceptions.IdentifierException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import importexport.IImportExport;
 import importexport.ImportExportJson;
 import model.Database;
 import model.Entity;
+
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +17,7 @@ import java.util.List;
 public class StorageJson extends AbstractStorage {
 
     private static StorageJson instance = null;
+    private Database database = Database.getInstance();
 
     public static AbstractStorage getInstance(){
         if (instance == null)
@@ -30,14 +34,15 @@ public class StorageJson extends AbstractStorage {
     }
 
     @Override
-    public void add (String path, Entity entity) {
-        for (Entity e: Database.getInstance().getEntities()){
+    public void add (String path, Entity entity) throws IdentifierException {
+        path = path + OrderProvider.getInstance().availableFile();
+        for (Entity e: database.getEntities()){
             if(e.getId().equals(entity.getId()))
-                return;
+                throw new IdentifierException("An entity with id: " + entity.getId() + " already exists");
         }
-        Database.getInstance().addEntity(entity);
+        database.addEntity(entity);
 
-        int fileNo = Database.getInstance().getNumberOfEntities() / Database.getInstance().getMaxEntities();
+        int fileNo = database.getNumberOfEntities() / database.getMaxEntities();
         path += Integer.toString(fileNo);
         IImportExport importExport = ImportExportJson.getInstance();
         List<Entity> entities = null;
@@ -48,7 +53,7 @@ public class StorageJson extends AbstractStorage {
 
     @Override
     public void delete(String path, Entity entity) {    //TODO dodati da obidje celu bazu fajl po fajl
-        Database.getInstance().getEntities().remove(entity);
+        database.getEntities().remove(entity);
         File jsonFile = new File(path).getAbsoluteFile();
         ObjectMapper objectMapper = new ObjectMapper();
         ArrayNode array = null;

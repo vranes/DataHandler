@@ -41,6 +41,13 @@ public class FileUtils {
         File file = new File(absolutePath);
         file.setWritable(true);
 
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         try (FileOutputStream fos = new FileOutputStream(file);
              BufferedOutputStream bos = new BufferedOutputStream(fos)) {
             // convert string to byte array

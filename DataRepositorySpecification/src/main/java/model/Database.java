@@ -1,19 +1,22 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Database {
 
     private int maxEntities;        // maksimalan broj entiteta po fajlu
-    private int filesNum;           // broj fajlova trenutne baze
     private List<Entity> entities;   // lista svih entiteta cele baze (ili trenutnog fajla ? zavisi od implementacije)
+    private Map<Integer, List<Entity>> files;
 
     private static Database instance = null;
+
     private Database(){
-        filesNum = 0;
         maxEntities = 10;
         entities = new ArrayList<>();
+        files = new HashMap<>();
     }
     public static Database getInstance(){
         if (instance == null)
@@ -23,11 +26,9 @@ public class Database {
 
     public void setMaxEntities(int maxEntities) { this.maxEntities = maxEntities; }
 
-    public void setFilesNum(int filesNum) { this.filesNum = filesNum; }
-
     public int getMaxEntities() { return maxEntities; }
 
-    public int getFilesNum() { return filesNum; }
+    public int getFilesNum() { return files.size(); }
 
     public void addEntity(Entity e) { entities.add(e); }
 
@@ -36,6 +37,10 @@ public class Database {
     public void setEntities(List<Entity> entities) { this.entities = entities; }
 
     public int getNumberOfEntities() { return entities.size(); }
+
+    public Map<Integer, List<Entity>> getFiles() { return files; }
+
+    public void setFiles(Map<Integer, List<Entity>> files) { this.files = files; }
 
 }
 

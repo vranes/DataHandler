@@ -1,5 +1,6 @@
 package service;
 
+import Exceptions.IdentifierException;
 import model.Database;
 import model.Entity;
 
@@ -11,36 +12,37 @@ public abstract class AbstractStorage {
 
     // Ideja je da ovde budu metode za CRUD operacije i filtriranje
     // Koje ce da barataju Database-om (u njemu je lista svih entiteta i samo najosnovnije metode)
-
+    protected Database database = Database.getInstance();
     public abstract List<Entity> read (String path);
-    public abstract void add (String path, Entity entity);  // TODO generisanje vs zadavanje ID-ja?
+    public abstract void add (String path, Entity entity) throws IdentifierException;  // TODO generisanje vs zadavanje ID-ja?
     public abstract void delete(String path, Entity entity);
 
     public void loadDatabase(String path) {
         List<Entity> entities = new ArrayList<>();
         entities = readAll(path);
-        Database.getInstance().setEntities(entities);
+        database.setEntities(entities);
     }
 
     public List<Entity> readAll(String path) {
         List<Entity> entities = new ArrayList<>();
         for (int i = 0; i < Database.getInstance().getFilesNum(); i++){
-            entities.addAll(read(path + Integer.toString(i)));
+            List<Entity> fileEntities = (read(path + Integer.toString(i)));
+            entities.addAll(fileEntities);
+            database.getFiles().put(i, fileEntities);
         }
 
         return entities;
     }
 
-    public void add(String path, String id, String name, Map<String, String> attributes, Map<String, Entity> nestedEntities){
+    public void add(String path, String id, String name, Map<String, String> attributes, Map<String, Entity> nestedEntities) throws IdentifierException {
         Entity entity = new Entity(id, name);
         entity.setAttributes(attributes);
         entity.setNestedEntities(nestedEntities);
         add(path, entity);
     }
 
-
     public void delete(String path, String id) {                // TODO rijesiti find-om
-        for (Entity e : Database.getInstance().getEntities()) {
+        for (Entity e : database.getEntities()) {
             if (e.getId().equals(id)) {
                 delete(path, e);
                 break;
@@ -49,7 +51,7 @@ public abstract class AbstractStorage {
     }
 
     public Entity findById(String id) {
-        for (Entity e: Database.getInstance().getEntities()){
+        for (Entity e: database.getEntities()){
             if (e.getId().equals(id))
                 return e;
         }
@@ -58,7 +60,7 @@ public abstract class AbstractStorage {
 
     public List<Entity> findByType(String type) {
         List <Entity> entityList = new ArrayList<>();
-        for (Entity e: Database.getInstance().getEntities()) {
+        for (Entity e: database.getEntities()) {
             if (e.getType().equals(type))
                 entityList.add(e);
         }
