@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import importexport.IImportExport;
 import importexport.ImportExportJson;
+import model.Database;
 import model.Entity;
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +31,10 @@ public class StorageJson extends AbstractStorage {
 
     @Override
     public void add (String path, Entity entity) {
+        for (Entity e: Database.getInstance().getEntities()){
+            if(e.getId().equals(entity.getId()))
+                return;
+        }
         Database.getInstance().addEntity(entity);
 
         int fileNo = Database.getInstance().getNumberOfEntities() / Database.getInstance().getMaxEntities();
@@ -38,7 +43,7 @@ public class StorageJson extends AbstractStorage {
         List<Entity> entities = null;
         entities = importExport.importEntities(path);
         entities.add(entity);
-        importExport.exportFile(path, entities);
+        importExport.exportEntities(path, entities);
     }
 
     @Override

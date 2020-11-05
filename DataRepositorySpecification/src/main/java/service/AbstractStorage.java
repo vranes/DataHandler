@@ -1,5 +1,6 @@
 package service;
 
+import model.Database;
 import model.Entity;
 
 import java.util.ArrayList;
@@ -15,6 +16,20 @@ public abstract class AbstractStorage {
     public abstract void add (String path, Entity entity);  // TODO generisanje vs zadavanje ID-ja?
     public abstract void delete(String path, Entity entity);
 
+    public void loadDatabase(String path) {
+        List<Entity> entities = new ArrayList<>();
+        entities = readAll(path);
+        Database.getInstance().setEntities(entities);
+    }
+
+    public List<Entity> readAll(String path) {
+        List<Entity> entities = new ArrayList<>();
+        for (int i = 0; i < Database.getInstance().getFilesNum(); i++){
+            entities.addAll(read(path + Integer.toString(i)));
+        }
+
+        return entities;
+    }
 
     public void add(String path, String id, String name, Map<String, String> attributes, Map<String, Entity> nestedEntities){
         Entity entity = new Entity(id, name);
@@ -23,14 +38,6 @@ public abstract class AbstractStorage {
         add(path, entity);
     }
 
-    public List<Entity> readAll(String path) {
-        List<Entity> entities = new ArrayList<>();
-        for (int i = 0; i < Database.getInstance().getFilesNum(); i++){
-            entities.addAll(read(path + Integer.toString(i)));
-        }
-        //TODO da li ovde azurirati broj entiteta u bazi? ne - bolje negde drugo ali nez gde
-        return entities;
-    }
 
     public void delete(String path, String id) {                // TODO rijesiti find-om
         for (Entity e : Database.getInstance().getEntities()) {

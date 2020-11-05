@@ -1,8 +1,5 @@
-package service;
+package model;
 
-import model.Entity;
-
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 
