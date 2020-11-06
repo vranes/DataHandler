@@ -2,9 +2,11 @@ package service;
 
 import model.Entity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
+import importexport.ImportExportYaml;
 public class main {
 
   public  static void main(String[] args) throws Exception {
@@ -12,20 +14,34 @@ public class main {
     Entity ent = new Entity();
     ent.setId("1");
     ent.setType("hello");
-      Map<String,String> map = new HashMap<String,String>();
-      map.put("Atr1","22");
-      map.put("Atr2","33");
-      Entity ent1 = new Entity();
-      ent1.setId("2");
-      ent1.setType("hiiiiii");
-      Map<String,String> map2 = new HashMap<String,String>();
-      map2.put("Atr1","444");
-      map2.put("Atr2","555");
-    ent.setAttributes(map);
-      Map<String,Entity> map4 = new HashMap<String,Entity>();
-      map4.put("1",ent1);
-    ent.setNestedEntities(map4);
-    System.out.println(ObjectConverterYaml.getInstance().formatToObject(ObjectConverterYaml.getInstance().objectToFormat(ent),Entity.class));
+    Map <String,String> map = new HashMap <String,String>();
+    map.put("Atr1","22");
+    map.put("Atr2","33");
 
+    Entity ent1 = new Entity();
+    ent1.setId("2");
+    ent1.setType("hiiiiii");
+    ent.setAttributes(map);
+    Map<String,Entity> map2 = new HashMap<String,Entity>();
+    Entity ent2 = new Entity();
+    ent2.setId("3");
+    ent2.setType("nested");
+    map2.put("1",ent2);
+
+    ent.setNestedEntities(map2);
+    List<Entity> enti = new ArrayList<Entity>();
+    enti.add(ent);
+    enti.add(ent1);
+    enti.add(ent2);
+//      ImportExportYaml.getInstance().exportFile("/Files/file",enti);
+//     List<Entity> e = ImportExportYaml.getInstance().importEntities("/Files/file");
+//        for(Entity i : e){
+//          System.out.println(i);
+//        }
+//      StorageYaml.getInstance().add("/Files/file",ent2);
+//      List<Entity> e = StorageYaml.getInstance().read("/Files/file0");
+//    for(Entity i : e){
+//      System.out.println(i);
+//    }
     }
 }

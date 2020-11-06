@@ -1,4 +1,5 @@
 package service;
+import importexport.IImportExport;
 import importexport.ImportExportYaml;
 import model.Entity;
 import org.yaml.snakeyaml.TypeDescription;
@@ -12,70 +13,60 @@ import java.util.List;
 import java.util.Map;
 
 public class StorageYaml extends AbstractStorage{
-Yaml yaml = new Yaml();
+    Yaml yaml = new Yaml();
+    private static StorageYaml instance = null;
+
+    public static StorageYaml getInstance(){           // TODO da li da bude instanca interfejsa
+        if (instance == null)
+            instance = new StorageYaml();
+        return instance;
+    }
 
     @Override
     public List<Entity> read(String path) {
-
-        Constructor constructor = new Constructor();
-        constructor.addTypeDescription(new TypeDescription(Entity.class));
-        List<Entity> entities = new ArrayList<Entity>();
-
-        Yaml yaml = new Yaml(constructor);
-
-        try (InputStream in = new FileInputStream(new File(path))) {
-
-            Iterable<Object> allYamlObjects = yaml.loadAll(in);
-
-            for (Iterator<?> yamlObjectIterator = allYamlObjects.iterator(); yamlObjectIterator.hasNext(); ) {
-                List<?> yamlObjects = (List<?>) yamlObjectIterator.next();
-                for (Object yamlObject : yamlObjects) {
-                    if (yamlObject instanceof Entity) {
-                        entities.add((Entity) yamlObject);
-                    }
-                }
-            }
-
-        } catch (FileNotFoundException e) {
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        List<Entity> entities = new ArrayList<>();
+        IImportExport importExport = ImportExportYaml.getInstance();
+        entities = importExport.importEntities(path);
         return entities;
     }
 
     @Override
     public void add(String path, Entity entity){
-        List<Entity> entities  = read(path);
-        entities.add(entity);
-        String yamlString = "";
+        IImportExport importExport = ImportExportYaml.getInstance();
+        List<Entity> entities = null;
 
-        for(Entity ent : entities){
-           yamlString = yamlString.concat(yaml.dump(ent));
+        int fileNo = Database.getInstance().getNumberOfEntities() / Database.getInstance().getMaxEntities();
+        path += Integer.toString(fileNo);
+        entities = importExport.importEntities(path);
+
+        for(Entity e : entities){
+            if(e.equals(entity)) return;
         }
-        ImportExportYaml.getInstance().exportFile(path,yamlString);
+        entities.add(entity);
+        Database.getInstance().addEntity(entity);
+
+
+
+        importExport.exportEntities(path, entities);
 
     }
 
     @Override
     public void delete(String path, Entity entity) {
-        List<Entity> entities = read(path);
-        entities.remove(entity);
+        List<Entity> entities;
+        Entity toRemove = null;
+        entities = ImportExportYaml.getInstance().importEntities(path);
 
-        ImportExportYaml.getInstance().exportFile(path,yaml.dump(entities));
+        Database.getInstance().getEntities().remove(entity);
 
+        for(Entity i : entities){
+            if(i.equals(entity)) {
+                toRemove = i;
+                break;
+            }
+        }
+        entities.remove(toRemove);
+        ImportExportYaml.getInstance().exportEntities(path,entities);
     }
-
-//
-//        String yamlString = "";
-//
-//        for(Entity ent : entities){
-//           yamlString = yamlString.concat(yaml.dump(ent));
-//        }
-//        try{ ImportExportYaml.getInstance().exportFile(path,yamlString);}  // ovo u odvojenu funkciju
-//        catch (IOException e) { e.printStackTrace();}
-
-
-
 
 }
