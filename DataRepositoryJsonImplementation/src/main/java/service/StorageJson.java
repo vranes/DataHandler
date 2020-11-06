@@ -7,8 +7,6 @@ import importexport.IImportExport;
 import importexport.ImportExportJson;
 import model.Database;
 import model.Entity;
-
-import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,26 +33,30 @@ public class StorageJson extends AbstractStorage {
 
     @Override
     public void add (String path, Entity entity) throws IdentifierException {
-        path = path + OrderProvider.getInstance().availableFile();
-        for (Entity e: database.getEntities()){
-            if(e.getId().equals(entity.getId()))
-                throw new IdentifierException("An entity with id: " + entity.getId() + " already exists");
+        if (!OrderProvider.getInstance().isAvailableID(entity.getId())){
+            throw new IdentifierException("An entity with id: " + entity.getId() + " already exists");
         }
-        database.addEntity(entity);
-
-        int fileNo = database.getNumberOfEntities() / database.getMaxEntities();
+        int fileNo = OrderProvider.getInstance().availableFile();
         path += Integer.toString(fileNo);
         IImportExport importExport = ImportExportJson.getInstance();
         List<Entity> entities = null;
         entities = importExport.importEntities(path);
         entities.add(entity);
         importExport.exportEntities(path, entities);
+
+        database.addEntity(entity);
+        if (!database.getFiles().containsKey(fileNo))
+            database.getFiles().put(fileNo, new ArrayList<Entity>());
+        database.getFiles().get(fileNo).add(entity);
     }
 
     @Override
-    public void delete(String path, Entity entity) {    //TODO dodati da obidje celu bazu fajl po fajl
-        database.getEntities().remove(entity);
-        File jsonFile = new File(path).getAbsoluteFile();
+    public void delete(String path, Entity entity) throws IdentifierException {
+        Integer fileNo = OrderProvider.getInstance().locateInFile(entity);
+        if(fileNo == null)
+            throw new IdentifierException("The entity for deletion doesn't exist");
+        path += Integer.toString(fileNo);
+        File jsonFile = new File(path).getAbsoluteFile();       //TODO zasto absolute file
         ObjectMapper objectMapper = new ObjectMapper();
         ArrayNode array = null;
         try {
@@ -71,6 +73,8 @@ public class StorageJson extends AbstractStorage {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        database.getEntities().remove(entity);
+        database.getFiles().get(fileNo).remove(entity);
     }
 
           /*  try {

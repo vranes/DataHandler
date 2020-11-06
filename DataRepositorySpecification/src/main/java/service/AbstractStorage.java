@@ -14,8 +14,8 @@ public abstract class AbstractStorage {
     // Koje ce da barataju Database-om (u njemu je lista svih entiteta i samo najosnovnije metode)
     protected Database database = Database.getInstance();
     public abstract List<Entity> read (String path);
-    public abstract void add (String path, Entity entity) throws IdentifierException;  // TODO generisanje vs zadavanje ID-ja?
-    public abstract void delete(String path, Entity entity);
+    public abstract void add (String path, Entity entity) throws IdentifierException;
+    public abstract void delete(String path, Entity entity) throws IdentifierException;
 
     public void loadDatabase(String path) {
         List<Entity> entities = new ArrayList<>();
@@ -41,63 +41,16 @@ public abstract class AbstractStorage {
         add(path, entity);
     }
 
-    public void delete(String path, String id) {                // TODO rijesiti find-om
-        for (Entity e : database.getEntities()) {
-            if (e.getId().equals(id)) {
-                delete(path, e);
-                break;
-            }
+    public void deleteID(String path, String id) throws IdentifierException {
+        Entity e = Crawler.getInstance().findById(id);
+        delete(path, e);
+    }
+
+    public void deleteAll(String path, List<Entity> list) throws IdentifierException {
+        for (Entity e: list){
+            delete(path, e);
         }
     }
 
-    public Entity findById(String id) {
-        for (Entity e: database.getEntities()){
-            if (e.getId().equals(id))
-                return e;
-        }
-        return null;
-    }
-
-    public List<Entity> findByType(String type) {
-        List <Entity> entityList = new ArrayList<>();
-        for (Entity e: database.getEntities()) {
-            if (e.getType().equals(type))
-                entityList.add(e);
-        }
-        return entityList;
-    }
-
-    /*
- (na primer: vrati sve entitete sa nazivom student koji sadrže ključ
- studijskiProgram i ime im počinje na M),
- */
-
-    public List<Entity> findByAttribute(List<Entity> entities, String name) {
-        List <Entity> result = new ArrayList<>();
-        for (Entity e: entities) {
-            for (String attribute: e.getAttributes().keySet()){
-                if (attribute.equals(name)) {
-                    result.add(e);
-                    break;
-                }
-            }
-        }
-        return result;
-    }
-// TODO proslijedjujemo i listu entiteta koji se pretrazuju da bi mogli da se kombinuju ovi upiti
-
-    public List<Entity> findByValue(List<Entity> entities, String operator, String name, String value) {
-        List <Entity> result = new ArrayList<>();
-        for (Entity e: entities) {
-            for (String attribute: e.getAttributes().keySet()){
-                if (attribute.equals(name)) {
-                    //TODO proveriti operator
-                    result.add(e);
-                    break;
-                }
-            }
-        }
-        return result;
-    }
 
 }

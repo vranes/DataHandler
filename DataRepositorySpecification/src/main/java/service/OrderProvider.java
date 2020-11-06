@@ -1,5 +1,6 @@
 package service;
 
+import Exceptions.IdentifierException;
 import model.Database;
 import model.Entity;
 
@@ -17,13 +18,33 @@ public class OrderProvider {
         return instance;
     }
 
-    public String availableFile(){                                     // nalazi prvi slobodan fajl
+    public int availableFile(){                                     // nalazi prvi slobodan fajl
         for(int i = 0; i < database.getFilesNum(); i++){
-            List<Entity> list = database.getFiles().get(i);
-            if (list.size() < database.getMaxEntities())
-                return Integer.toString(i);
+            List<Entity> fileEntities = database.getFiles().get(i);
+            if (fileEntities.size() < database.getMaxEntities())
+                return i;
         }
-        return Integer.toString(database.getFilesNum());
+        return database.getFilesNum();
+    }
+
+    public Integer locateInFile(Entity entity){
+        for(int i = 0; i < database.getFilesNum(); i++){
+            List<Entity> fileEntities = database.getFiles().get(i);
+            for (Entity e:fileEntities){
+                if(e.getId().equals(entity.getId()))
+                    return i;
+            }
+        }
+        return null;
+    }
+
+    public boolean isAvailableID(String id) {                     // proverava da li je ID slobodan
+        for (Entity e: database.getEntities()) {
+            if (e.getId().equals(id)){
+                return false;
+            }
+        }
+        return true;
     }
 
     public String autoID(){                                            // nalazi prvi slobodan ID
