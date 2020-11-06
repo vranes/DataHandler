@@ -1,6 +1,5 @@
 package importexport;
 
-
 import model.Entity;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
@@ -43,6 +42,7 @@ public class ImportExportYaml implements IImportExport {
         if (!fileString.isEmpty()) {
             entities = yaml.load(fileString);
         }
+
         return entities;
 
     }

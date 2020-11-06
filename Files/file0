@@ -18,3 +18,48 @@
   id: '3'
   nestedEntities: {}
   type: nested
+- !!model.Entity
+  attributes: {}
+  id: '4'
+  nestedEntities: {}
+  type: Ko
+- !!model.Entity
+  attributes: {k2: '*', k: val}
+  id: '5'
+  nestedEntities: {}
+  type: lo
+- !!model.Entity
+  attributes: {}
+  id: k
+  nestedEntities: {}
+  type: ''
+- !!model.Entity
+  attributes: {size: ' ', time: '22:30'}
+  id: '7'
+  nestedEntities:
+    '1':
+      attributes: {Atr2: '33', Atr1: '22'}
+      id: '1'
+      nestedEntities:
+        '1':
+          attributes: {}
+          id: '3'
+          nestedEntities: {}
+          type: nested
+      type: hello
+  type: clock
+- !!model.Entity
+  attributes: {block: ' ', key: '12'}
+  id: '13'
+  nestedEntities:
+    '1':
+      attributes: {Atr2: '33', Atr1: '22'}
+      id: '1'
+      nestedEntities:
+        '1':
+          attributes: {}
+          id: '3'
+          nestedEntities: {}
+          type: nested
+      type: hello
+  type: llll

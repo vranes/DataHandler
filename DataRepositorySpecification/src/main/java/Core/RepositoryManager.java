@@ -10,16 +10,16 @@ public class RepositoryManager {
     private static AbstractStorage storage;
     private static IObjectConverter objectConverter;
 
-    public static void registerImportExport(IImportExport importExport) {
-        importExport = importExport;
+    public static void registerImportExport(IImportExport importExportReg) {
+        importExport = importExportReg;
     }
 
-    public static void registerStorage(AbstractStorage storage) {
-        storage = storage;
+    public static void registerStorage(AbstractStorage storageReg) {
+        storage = storageReg;
     }
 
-    public static void registerObjectConverter(IObjectConverter objectConverter) {
-        objectConverter = objectConverter;
+    public static void registerObjectConverter(IObjectConverter objectConverterReg) {
+        objectConverter = objectConverterReg;
     }
 
     public static IImportExport getImportExport() {

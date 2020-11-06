@@ -3,10 +3,10 @@ package actions;
 public class ActionManager {
 	private static ActionManager instance = null;
 
-//	private AddAction addAction;
-//	private SortFilterAction sortAction;
-//	private DeleteAction deleteActioin;
-//	private FilterAction filterActionL;
+	private AddButtonAction addButtonAction;
+	private SortButtonAction sortButtonAction;
+	private DeleteButtonAction deleteButtonAction;
+	private FilterButtonAction filterButtonAction;
 //	private EditAction editAction;
 
 	private ActionManager() {
@@ -15,10 +15,10 @@ public class ActionManager {
 	
 	private void initializeActions() {
 
-//		addButtonAction = new AddButtonAction();
-//		sortFilterAction = new SortFilterAction();
-//		deleteActioin = new DeleteAction();
-//		filterAction = new filterAction();
+		addButtonAction = new AddButtonAction();
+		deleteButtonAction = new DeleteButtonAction();
+		filterButtonAction = new FilterButtonAction();
+		sortButtonAction = new SortButtonAction();
 //		editAction - new editAction();
 	}
 	
@@ -30,20 +30,19 @@ public class ActionManager {
 	}
 
 	
-	/* public SortFilterAction getSortFilterAction() {
-		return sortFilterAction;
+	public FilterButtonAction getFilterButtonAction() {
+		return filterButtonAction;
 	}
-
-	
-	public DeleteAction getDeleteAction() {
-		return deleteAction;
-	}
-	
 
 	public AddButtonAction getAddButtonAction() {
 		return addButtonAction;
 	}
 
+	public DeleteButtonAction getDeleteButtonAction() {
+		return deleteButtonAction;
+	}
 
-	*/
+	public SortButtonAction getSortButtonAction(){return sortButtonAction;}
+
+
 }

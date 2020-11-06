@@ -1,33 +1,55 @@
 package start;
+import service.*;
+import model.*;
+import importexport.*;
+import Core.*;
+import view.frame.MainFrame;
+
+import javax.swing.*;
+import java.util.List;
 
 //extends PublisherImplementation
 public class AppCore  {
 
-    /*private TableModel tableModel = null;
-    private TableModel lowerTableModel = null;
+    IImportExport importExport;
+    AbstractStorage storage;
+    IObjectConverter objectConverter;
 
     public AppCore() {
-//        errorHandler = ErrorHandler.getInstance();
-//        errorHandler.addSubscriber(new ErrorHandlerView());
+         importExport = Core.RepositoryManager.getImportExport();
+		 storage = Core.RepositoryManager.getStorage();
+		 objectConverter = Core.RepositoryManager.getObjectConverter();
+
     }
 
-//    public void loadResource(){
-//        InformationResource ir = (InformationResource) this.database.loadResource();
-//        this.notifySubscribers(new Notification(NotificationCode.RESOURCE_LOADED,ir));
-//    }
+    public IImportExport getImportExport() {
+        return importExport;
+    }
 
+    public AbstractStorage getStorage() {
+        return storage;
+    }
 
+    public IObjectConverter getObjectConverter() {
+        return objectConverter;
+    }
 
-	public void setTableModel(TableModel tableModel) {
-		this.tableModel = tableModel;
-	}
+    public JTable loadTable(List<Entity> entities){
+          String[] columnNames = {"ID",
+                "Type",
+                "Attributes",
+                "Nested Entity"};
+        Object[][] data = new Object[30][4];
+        int i = 0;
+        for(Entity e : entities){
+            data[i][0] = e.getId();
+            data[i][1] = e.getType();
+            data[i][2] = e.getAttributes().toString();
+            data[i][3] = e.getNestedEntities().toString();
+            i++;
+        }
+        return  new JTable(data,columnNames);
+    }
 
-
-
-//	public ErrorHandler getErrorHandler() {
-//		return errorHandler;
-//	}
-*/
-	
 }
 

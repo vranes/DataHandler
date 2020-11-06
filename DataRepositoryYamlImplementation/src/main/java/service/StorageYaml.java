@@ -25,8 +25,12 @@ public class StorageYaml extends AbstractStorage{
     @Override
     public List<Entity> read(String path) {
         List<Entity> entities = new ArrayList<>();
+
         IImportExport importExport = ImportExportYaml.getInstance();
         entities = importExport.importEntities(path);
+        for(Entity e : entities)
+            Database.getInstance().addEntity(e);// ove dve linije dodate
+
         return entities;
     }
 
@@ -37,8 +41,8 @@ public class StorageYaml extends AbstractStorage{
 
         int fileNo = Database.getInstance().getNumberOfEntities() / Database.getInstance().getMaxEntities();
         path += Integer.toString(fileNo);
+        System.out.println(path);
         entities = importExport.importEntities(path);
-
         for(Entity e : entities){
             if(e.equals(entity)) return;
         }
