@@ -13,7 +13,7 @@ public class ImportExportJson implements IImportExport {
     
     private static ImportExportJson instance = null;
     
-    public static IImportExport getInstance(){           // TODO da li da bude instanca interfejsa
+    public static IImportExport getInstance(){
         if (instance == null)
             instance = new ImportExportJson();
         return instance;

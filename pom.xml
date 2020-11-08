@@ -24,6 +24,7 @@
         <module>DataRepositorySpecification</module>
         <module>DataRepositoryJsonImplementation</module>
         <module>DataRepositoryYamlImplementation</module>
+        <module>DataRepositoryCustomImplementation</module>
     </modules>
     <name>DataRepository</name>
     <description>Nikolina Vranes i Ilija Pavlovic</description>
@@ -33,11 +34,7 @@
         <maven.compile.source>1.8</maven.compile.source>
     </properties>
     <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml -->
-    <dependency>
-        <groupId>com.fasterxml.jackson.dataformat</groupId>
-        <artifactId>jackson-dataformat-yaml</artifactId>
-        <version>2.11.2</version>
-    </dependency>
+
 
 
 

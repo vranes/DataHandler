@@ -1,15 +1,11 @@
 package start;
 
-import model.Entity;
-
 import view.frame.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Main {
 
 	public static void main(String[] args) throws ClassNotFoundException {
-		Class.forName("Core.JsonRegistrator");
+		Class.forName("core.JsonRegistrator");
 
 
 //		Entity ent = new Entity();

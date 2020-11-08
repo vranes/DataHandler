@@ -2,7 +2,6 @@ package start;
 import service.*;
 import model.*;
 import importexport.*;
-import Core.*;
 import view.frame.MainFrame;
 
 import javax.swing.*;
@@ -18,9 +17,9 @@ public class AppCore  {
     Crawler crawler;
 
     public AppCore() {
-         importExport = Core.RepositoryManager.getImportExport();
-		 storage = Core.RepositoryManager.getStorage();
-		 objectConverter = Core.RepositoryManager.getObjectConverter();
+         importExport = core.RepositoryManager.getImportExport();
+		 storage = core.RepositoryManager.getStorage();
+		 objectConverter = core.RepositoryManager.getObjectConverter();
 		 orderProvider = new OrderProvider();
 		 crawler = new Crawler();
 
