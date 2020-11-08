@@ -9,16 +9,16 @@ import java.util.Map;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import Exceptions.IdentifierException;
 import model.Entity;
-import service.Database;
+import model.Database;
 import start.AppCore;
 import view.frame.MainFrame;
 
-public class AddButtonAction implements ActionListener{
+public class AddButtonAction implements ActionListener {
 
 	@Override
-	public void actionPerformed(ActionEvent e) 
-	{
+	public void actionPerformed(ActionEvent e) {
 
 		JPanel mainPanel = new JPanel(new GridBagLayout());
 		JLabel lblAutoId = new JLabel("AutoID:");
@@ -39,9 +39,9 @@ public class AddButtonAction implements ActionListener{
 		autoID.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(jfId.isEnabled()){
+				if (jfId.isEnabled()) {
 					jfId.setEnabled(false);
-				}else jfId.setEnabled(true);
+				} else jfId.setEnabled(true);
 			}
 		});
 
@@ -58,47 +58,52 @@ public class AddButtonAction implements ActionListener{
 
 		mainPanel.add(p);
 
-		if( JOptionPane.showConfirmDialog(null,mainPanel,"Fill this form to add",JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION)
-		{
+		if (JOptionPane.showConfirmDialog(null, mainPanel, "Fill this form to add", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
 			Entity ent = new Entity();
-			Map <String,Entity> nestedEntityMap = new HashMap <>();
+			Map <String, Entity> nestedEntityMap = new HashMap <>();
 
-			if(jfId.isEnabled()){
-				ent.setId(((JTextField)(p.getComponent(3))).getText());
-			}else ent.setId(((JTextField)(p.getComponent(3))).getText()); //TODO Auto Generate ID
+			if (jfId.isEnabled()) {
+				ent.setId(((JTextField) (p.getComponent(3))).getText());
+			} else ent.setId(MainFrame.getInstance().getAppCore().getOrderProvider().autoID()); //TODO Auto Generate ID
 
-			ent.setType(((JTextField)(p.getComponent(5))).getText());
+			ent.setType(((JTextField) (p.getComponent(5))).getText());
 
-			String attributes = ((JTextField)(p.getComponent(7))).getText();
+			String attributes = ((JTextField) (p.getComponent(7))).getText();
 			String[] res = attributes.split("[,]", 0);
 
-			if(res.length != 1){
+			if (res.length > 0 && !res[0].equals("")) {
 				int k = 0;
-				for(String myStr: res) {
+				for (String myStr : res) {
 					String[] kv = res[k].split("[.]", 0);
-					if(kv[1].contains("*")) ent.addAttribute(kv[0]," ");
-					else ent.addAttribute(kv[0],kv[1]);
+					if (kv[1].contains("*")) ent.addAttribute(kv[0], "");
+					else ent.addAttribute(kv[0], kv[1]);
 					k++;
 				}
 			}
 
-			for(Entity et :Database.getInstance().getEntities()){
-				if(((JTextField)(p.getComponent(9))).getText().isEmpty())break;
-				if(et.getId().contains(((JTextField)(p.getComponent(9))).getText())){
+			for (Entity et : Database.getInstance().getEntities()) {
+				if (((JTextField) (p.getComponent(9))).getText().isEmpty()) break;
+				if (et.getId().contains(((JTextField) (p.getComponent(9))).getText())) {
 					nestedEntityMap.put(et.getId(), et);
 					ent.setNestedEntities(nestedEntityMap);
 
 					break;
 				}
 			}
-			MainFrame.getInstance().getAppCore().getStorage().add("/Files/file",ent);
+
+			tryAdd(ent);
 			MainFrame.getInstance().setJt(MainFrame.getInstance().getAppCore().loadTable(Database.getInstance().getEntities()));
+
 		}
 
-			
-		
-		}
-		
 	}
-	
 
+	public void tryAdd(Entity ent) {
+		try {
+			MainFrame.getInstance().getAppCore().getStorage().add("/Files/file", ent);
+		} catch (IdentifierException e) {
+			JOptionPane.showMessageDialog(MainFrame.getInstance(),e.getMessage());
+		}
+
+	}
+}

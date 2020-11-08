@@ -5,6 +5,7 @@ import model.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Crawler {
 
@@ -39,29 +40,50 @@ public class Crawler {
  studijskiProgram i ime im počinje na M),
  */
 
-    public List<Entity> findByAttribute(List<Entity> entities, String name) {
+    public List<Entity> findByAttribute(List<Entity> entities, List<String> names) {
         List <Entity> result = new ArrayList<>();
+        System.out.println(result +" find BY attribute");
+        System.out.println(names +" names find BY attribute");
+        System.out.println(entities +" find BY attribute");
+
+
         for (Entity e: entities) {
-            for (String attribute: e.getAttributes().keySet()){
-                if (attribute.equals(name)) {
-                    result.add(e);
+            int flag = 0;
+            for(String s : names){
+                if(e.getAttributes().containsKey(s)) flag = 1;
+                else {
+                    flag = 0 ;
                     break;
                 }
             }
+            if(flag == 1) result.add(e);
         }
+        System.out.println(result +" find BY attribute end");
+        System.out.println(names +" names find BY attribute end");
+        System.out.println(entities +" find BY attribute end");
         return result;
     }
 
-    public List<Entity> findByValue(List<Entity> entities, String operator, String name, String value) {
+    public List<Entity> findByValue(List<Entity> entities, Map<String, String> valMap) {
         List <Entity> result = new ArrayList<>();
+        System.out.println(result +" find BY value ");
+        System.out.println(valMap +" names find BY value ");
+        System.out.println(entities +" find BY value ");
         for (Entity e: entities) {
-            for (String key: e.getAttributes().keySet()){
-                if (name.equals(key) && value.equals(e.getAttributes().get(key))) {
-                    result.add(e);
+            int flag = 0;
+            for(Map.Entry<String,String> pair : valMap.entrySet()){
+                if(e.getAttributes().get(pair.getKey()).equals(pair.getValue())){
+                    flag = 1;
+                }else {
+                    flag = 0;
                     break;
                 }
             }
+            if(flag == 1) result.add(e);
         }
+        System.out.println(result +" find BY value end");
+        System.out.println(valMap +" names find BY value end");
+        System.out.println(entities +" find BY value end");
         return result;
     }
 }

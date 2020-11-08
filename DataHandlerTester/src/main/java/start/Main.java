@@ -9,7 +9,7 @@ import java.util.Map;
 public class Main {
 
 	public static void main(String[] args) throws ClassNotFoundException {
-		Class.forName("Core.YamlRegistrator");
+		Class.forName("Core.JsonRegistrator");
 
 
 //		Entity ent = new Entity();

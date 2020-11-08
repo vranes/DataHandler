@@ -28,6 +28,8 @@ public class StorageJson extends AbstractStorage {
         List<Entity> entities = new ArrayList<>();
         IImportExport importExport = ImportExportJson.getInstance();
         entities = importExport.importEntities(path);
+        for(Entity e : entities)
+            Database.getInstance().addEntity(e);
         return entities;
     }
 
@@ -52,24 +54,27 @@ public class StorageJson extends AbstractStorage {
 
     @Override
     public void delete(String path, Entity entity) throws IdentifierException {
+
         Integer fileNo = OrderProvider.getInstance().locateInFile(entity);
         if(fileNo == null)
             throw new IdentifierException("The entity for deletion doesn't exist");
-        path += Integer.toString(fileNo);
-        File jsonFile = new File(path).getAbsoluteFile();       //TODO zasto absolute file
+        String filename =  "/file"+Integer.toString(fileNo);
+        String filePath = path.concat(filename);
+        String absolutePath = new File("").getAbsolutePath() + filePath;
+        File file = new File(absolutePath);
         ObjectMapper objectMapper = new ObjectMapper();
         ArrayNode array = null;
         try {
-            array = (ArrayNode) objectMapper.readTree(jsonFile);
+            array = (ArrayNode) objectMapper.readTree(file);
             String id = entity.getId();
             for (int i = 0; i < array.size(); i++) {
-                if (array.get(i).get("id").equals(id)) {
+                if (array.get(i).get("id").asText().equals(String.valueOf(id))) {
                     array.remove(i);
                     break;
                 }
             }
             String formattedJson = objectMapper.writeValueAsString(array);
-            ImportExportJson.getInstance().exportFile(path, formattedJson);
+            ImportExportJson.getInstance().exportFile(filePath, formattedJson);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -27,7 +27,7 @@ public class Entity {
     }
 
     public String getId() { return id; }
-
+    public Integer abcd() { return Integer.valueOf(getId()); }
     public void setId(String id) { this.id = id; }
 
     public void addAttribute(String key, String value) { attributes.put(key, value); }

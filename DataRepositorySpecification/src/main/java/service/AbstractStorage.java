@@ -4,7 +4,9 @@ import Exceptions.IdentifierException;
 import model.Database;
 import model.Entity;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,10 +19,25 @@ public abstract class AbstractStorage {
     public abstract void add (String path, Entity entity) throws IdentifierException;
     public abstract void delete(String path, Entity entity) throws IdentifierException;
 
-    public void loadDatabase(String path) {
-        List<Entity> entities = new ArrayList<>();
-        entities = readAll(path);
-        database.setEntities(entities);
+    public void loadDatabase(String path){
+
+        int fileNum = 0;
+        String filename =  "/file"+Integer.toString(fileNum);
+        String filePath = path.concat(filename);
+        String absolutePath = new File("").getAbsolutePath() + filePath;
+        File file = new File(absolutePath);
+        Map<Integer, List<Entity>> files = new HashMap <>();
+
+        while(file.exists()){
+            files.put(fileNum,read(filePath));
+            fileNum++;
+            filename = "/file"+Integer.toString(fileNum);
+            filePath = path.concat(filename);
+            absolutePath = new File("").getAbsolutePath() + filePath;
+            file = new File(absolutePath);
+        }
+        System.out.println(files);
+        Database.getInstance().setFiles(files);
     }
 
     public List<Entity> readAll(String path) {

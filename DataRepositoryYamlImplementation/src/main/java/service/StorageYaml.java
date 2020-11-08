@@ -1,6 +1,8 @@
 package service;
+import Exceptions.IdentifierException;
 import importexport.IImportExport;
 import importexport.ImportExportYaml;
+import model.Database;
 import model.Entity;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
@@ -35,42 +37,50 @@ public class StorageYaml extends AbstractStorage{
     }
 
     @Override
-    public void add(String path, Entity entity){
+    public void add(String path, Entity entity) throws IdentifierException {
+        if (!OrderProvider.getInstance().isAvailableID(entity.getId())){
+            throw new IdentifierException("An entity with id: " + entity.getId() + " already exists");
+        }
+
+        int fileNo = OrderProvider.getInstance().availableFile();
+        path += Integer.toString(fileNo);
+
         IImportExport importExport = ImportExportYaml.getInstance();
         List<Entity> entities = null;
 
-        int fileNo = Database.getInstance().getNumberOfEntities() / Database.getInstance().getMaxEntities();
-        path += Integer.toString(fileNo);
-        System.out.println(path);
+
         entities = importExport.importEntities(path);
-        for(Entity e : entities){
-            if(e.equals(entity)) return;
-        }
         entities.add(entity);
-        Database.getInstance().addEntity(entity);
-
-
-
         importExport.exportEntities(path, entities);
 
+        database.addEntity(entity);
+        if (!database.getFiles().containsKey(fileNo))
+            database.getFiles().put(fileNo, new ArrayList<Entity>());
+        database.getFiles().get(fileNo).add(entity);
     }
 
     @Override
-    public void delete(String path, Entity entity) {
+    public void delete(String path, Entity entity) throws IdentifierException {
+        Integer fileNo = OrderProvider.getInstance().locateInFile(entity);
+        if(fileNo == null)
+            throw new IdentifierException("The entity for deletion doesn't exist");
+        String filename =  "/file"+Integer.toString(fileNo);
+        String filePath = path.concat(filename);
+        String absolutePath = new File("").getAbsolutePath() + filePath;
+        File file = new File(absolutePath);
         List<Entity> entities;
         Entity toRemove = null;
-        entities = ImportExportYaml.getInstance().importEntities(path);
-
+        entities = ImportExportYaml.getInstance().importEntities(filePath);
         Database.getInstance().getEntities().remove(entity);
 
         for(Entity i : entities){
-            if(i.equals(entity)) {
+            if(i.getId().equals(entity.getId())) {
                 toRemove = i;
                 break;
             }
         }
         entities.remove(toRemove);
-        ImportExportYaml.getInstance().exportEntities(path,entities);
+        ImportExportYaml.getInstance().exportEntities(filePath,entities);
     }
 
 }

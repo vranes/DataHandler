@@ -1,9 +1,7 @@
 package importexport;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
 import model.Entity;
 import utils.FileUtils;
 import java.io.*;
@@ -30,6 +28,7 @@ public class ImportExportJson implements IImportExport {
 
     public List<Entity> importEntities(String sourcePath){
         ObjectMapper objectMapper = new ObjectMapper();
+
         List<Entity> entities = new ArrayList<>();
         String fileString = importFile(sourcePath);
         if (!fileString.isEmpty()) {

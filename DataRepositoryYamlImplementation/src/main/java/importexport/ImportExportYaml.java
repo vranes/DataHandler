@@ -48,7 +48,7 @@ public class ImportExportYaml implements IImportExport {
     }
 
     @Override
-    public void exportFile(String destinationPath, String data)  {
+     public void exportFile(String destinationPath, String data) {
         FileUtils.stringToFile(destinationPath, data);
     }
 

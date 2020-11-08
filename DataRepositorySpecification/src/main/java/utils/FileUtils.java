@@ -16,6 +16,7 @@ public class FileUtils {
         String absolutePath = new File("").getAbsolutePath() + filePath;
         File file = new File(absolutePath);
         file.setReadable(true);
+
         if(file.exists()){
             try (Stream<String> stream = Files.lines(Paths.get(absolutePath),
                     StandardCharsets.UTF_8)) {

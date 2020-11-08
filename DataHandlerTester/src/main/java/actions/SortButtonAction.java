@@ -1,14 +1,14 @@
 package actions;
 
 import model.Entity;
-import service.Database;
+import model.Database;
+import view.frame.MainFrame;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class SortButtonAction implements ActionListener {
     @Override
@@ -26,26 +26,64 @@ public class SortButtonAction implements ActionListener {
         JTextField jfType = new JTextField(5);
         JCheckBox jcbId = new JCheckBox();
         JCheckBox jcbType = new JCheckBox();
+        JComboBox jcmbId= new JComboBox();
+        JComboBox jcmbType= new JComboBox();
 
+        jcmbId.addItem("Ascending");
+        jcmbId.addItem("Descending");
+        jcmbType.addItem("Ascending");
+        jcmbType.addItem("Descending");
 
         p.add(lblId);
+        p.add(jcmbId);
         p.add(jcbId);
-        p.add(jfId);
         p.add(lblType);
+        p.add(jcmbType);
         p.add(jcbType);
-        p.add(jfType);
-
-
+        ArrayList<Entity> ents = (ArrayList <Entity>) Database.getInstance().getEntities();
         mainPanel.add(p);
-
         if( JOptionPane.showConfirmDialog(null,mainPanel,"Fill this form to delete",JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION)
         {
-            String idToSortBy = ((JTextField)(p.getComponent(0))).getText();
-            String typeToSortBy = ((JTextField)(p.getComponent(1))).getText();
+            System.out.println(jcmbId.getSelectedItem());
+            if(jcbId.isSelected() && jcbType.isSelected()) {
+                if(jcmbId.getSelectedItem().equals("Ascending") && jcmbType.getSelectedItem().equals("Ascending"))
+                    Collections.sort(ents, Comparator.comparing(Entity::abcd).thenComparing(Entity::getType));
+                else if(jcmbId.getSelectedItem().equals("Descending") && jcmbType.getSelectedItem().equals("Descending")){
+                    Collections.sort(ents, Comparator.comparing(Entity::abcd).thenComparing(Entity::getType));
+                    Collections.reverse(ents);
+                }
+                else if(jcmbId.getSelectedItem().equals("Ascending") && jcmbType.getSelectedItem().equals("Descending")){
+                    Collections.sort(ents, Comparator.comparing(Entity::getType));
+                    Collections.reverse(ents);
+                    Collections.sort(ents, Comparator.comparing(Entity::abcd));
 
-
+                }
+                else if(jcmbId.getSelectedItem().equals("Descending") && jcmbType.getSelectedItem().equals("Ascending")){
+                    Collections.sort(ents, Comparator.comparing(Entity::abcd));
+                    Collections.reverse(ents);
+                    Collections.sort(ents, Comparator.comparing(Entity::getType));
+                }
+            }
+            else if(jcbId.isSelected() && !jcbType.isSelected()){
+                if(jcmbId.getSelectedItem().equals("Ascending") )
+                    Collections.sort(ents, Comparator.comparing(Entity::abcd));
+                else if(jcmbId.getSelectedItem().equals("Descending") ){
+                    Collections.sort(ents, Comparator.comparing(Entity::abcd));
+                    Collections.reverse(ents);
+                }
+            }
+            else if(!jcbId.isSelected() && jcbType.isSelected()){
+                if(jcmbType.getSelectedItem().equals("Ascending") )
+                    Collections.sort(ents, Comparator.comparing(Entity::getType));
+                else if(jcmbType.getSelectedItem().equals("Descending") ){
+                    Collections.sort(ents, Comparator.comparing(Entity::getType));
+                    Collections.reverse(ents);
+                }
+            }
         }
-        //  MainFrame.getInstance().setJt(MainFrame.getInstance().getAppCore().loadTable(Database.getInstance().getEntities())); TODO UPDATE TABLE
+
+        MainFrame.getInstance().setJt(MainFrame.getInstance().getAppCore().loadTable(ents));
+
     }
 
 }

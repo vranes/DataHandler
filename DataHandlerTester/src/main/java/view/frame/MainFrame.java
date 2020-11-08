@@ -7,7 +7,7 @@ import java.util.List;
 import javax.swing.*;
 import actions.ActionManager;
 import model.Entity;
-import service.Database;
+import model.Database;
 import start.AppCore;
 
 public class MainFrame extends JFrame{
@@ -18,6 +18,7 @@ public class MainFrame extends JFrame{
 	private ActionManager actionManager;
 	private JScrollPane jscroll;
 	private JPanel mainPanel;
+	private JPanel scrollPanel;
 	private JButton btnDelete;
 	private JButton btnAdd;
 	private JButton btnFilter;
@@ -38,7 +39,7 @@ public class MainFrame extends JFrame{
 	private void initialize(){
 		appCore = new AppCore();
 	    actionManager = ActionManager.getInstance();
-        JFileChooser jfc = new JFileChooser("./Files");
+        //  JFileChooser jfc = new JFileChooser("./Files");
 //        JPanel p = new JPanel(new GridBagLayout());
 //        JButton confirmBtn  =  new JButton();
 //        GridBagConstraints c = new GridBagConstraints();
@@ -57,13 +58,14 @@ public class MainFrame extends JFrame{
 //        }else initializeGUI();
 
 
-        if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = jfc.getSelectedFile();
+
+           // File selectedFile = jfc.getCurrentDirectory();
             List<Entity> entities = new ArrayList<Entity>();
-            entities =  appCore.getStorage().read(selectedFile.getPath());
+            appCore.getStorage().loadDatabase("/Files");
+            entities =  Database.getInstance().getEntities();
 
             initializeGUI();
-        }
+
     }
 
 
@@ -91,7 +93,7 @@ public class MainFrame extends JFrame{
 
 
         jt = appCore.loadTable(Database.getInstance().getEntities());
-
+        System.out.println(Database.getInstance().getEntities());
         jt.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         jt.setDefaultEditor(Object.class, null);
 
@@ -103,11 +105,12 @@ public class MainFrame extends JFrame{
 
         mainPanel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-
+        scrollPanel = new JPanel();
+        scrollPanel.add(jscroll);
         c.gridx = 0;
         c.gridy = 0;
         c.gridwidth = 25;
-        mainPanel.add(jscroll,c);
+        mainPanel.add(scrollPanel,c);
 
         c.gridwidth = 1;
 
@@ -155,16 +158,18 @@ public class MainFrame extends JFrame{
         jt.setDefaultEditor(Object.class, null);
         GridBagConstraints c = new GridBagConstraints();
         jt.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        mainPanel.remove(jscroll);
+        mainPanel.remove(scrollPanel);
+        scrollPanel = new JPanel();
         jscroll = new JScrollPane(jt);
         jscroll.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         jscroll.setPreferredSize(new Dimension(900,500));
-
+        jt.setAutoCreateRowSorter(true);
         c.gridx = 0;
         c.gridy = 0;
         c.gridwidth = 25;
-        mainPanel.add(jscroll,c);
+        scrollPanel.add(jscroll);
+        mainPanel.add(scrollPanel,c);
         revalidate();
         repaint();
     }

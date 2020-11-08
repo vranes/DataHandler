@@ -14,12 +14,24 @@ public class AppCore  {
     IImportExport importExport;
     AbstractStorage storage;
     IObjectConverter objectConverter;
+    OrderProvider orderProvider;
+    Crawler crawler;
 
     public AppCore() {
          importExport = Core.RepositoryManager.getImportExport();
 		 storage = Core.RepositoryManager.getStorage();
 		 objectConverter = Core.RepositoryManager.getObjectConverter();
+		 orderProvider = new OrderProvider();
+		 crawler = new Crawler();
 
+    }
+
+    public OrderProvider getOrderProvider() {
+        return orderProvider;
+    }
+
+    public Crawler getCrawler() {
+        return crawler;
     }
 
     public IImportExport getImportExport() {
@@ -39,7 +51,7 @@ public class AppCore  {
                 "Type",
                 "Attributes",
                 "Nested Entity"};
-        Object[][] data = new Object[30][4];
+        Object[][] data = new Object[3000][4];
         int i = 0;
         for(Entity e : entities){
             data[i][0] = e.getId();
