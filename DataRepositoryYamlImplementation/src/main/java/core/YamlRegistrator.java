@@ -1,4 +1,4 @@
-package Core;
+package core;
 
 import importexport.ImportExportYaml;
 import service.*;
