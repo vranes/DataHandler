@@ -51,10 +51,10 @@ public class Entity {
     @Override
     public String toString() {
         return "Entity{" +
-                "type='" + type + ':' +
-                ", id='" + id + ':' +
-                ", attributes=" + attributes +
-                ", nestedEntities=" + nestedEntities +
+                "type = " + type +
+                ", id = " + id +
+                ", attributes = " + attributes +
+                ", nestedEntities = " + nestedEntities +
                 '}';
     }
 

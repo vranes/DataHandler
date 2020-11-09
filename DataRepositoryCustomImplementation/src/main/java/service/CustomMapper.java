@@ -11,14 +11,15 @@ import java.util.List;
 public class CustomMapper {
 
     private static CustomMapper instance = null;
+    // menjanjem ovih atributa lako menjamo oblik custom formata po zelji
     private char beginObject = '(';
     private char endObject = ')';
-    private char beginList = '[';
-    private char endList = ']';
-    private char beginMap = '{';
-    private char endMap = '}';
-    private char beginWord = '\'';
-    private char endWord = '\'';
+    private char beginList = '{';
+    private char endList = '}';
+    private char beginMap = '[';
+    private char endMap = ']';
+    private char beginWord = '*';
+    private char endWord = '*';
     private char delimiter = ';';
     private char assign = '-';
 
@@ -30,7 +31,7 @@ public class CustomMapper {
 
     public List<Entity> readValueAsList(String string) throws IOException, FormatException {
         ArrayList<Entity> entities = new ArrayList<>();
-        CustomReader reader = new CustomReader(-1, string);
+        CustomReader reader = new CustomReader(string, beginWord, endWord, assign);
         while (reader.read() == beginObject) {
             Entity newEntity = new Entity();
             while (reader.peek() != endObject) {
@@ -53,7 +54,7 @@ public class CustomMapper {
                     reader.read(assign);
                     reader.read(beginMap);
                     while (reader.peek() != endMap){
-                        String type = reader.nextName();
+                        String key = reader.nextName();
                         reader.read(assign);
                         reader.read(beginObject);
                         Entity nestedEntity = new Entity();
@@ -73,10 +74,17 @@ public class CustomMapper {
                                 }
                                 reader.read(endMap);
                             }
-
+                            else if (nestedName.equals("nestedEntities")){
+                                reader.read(assign);
+                                reader.read(beginMap);
+                                while (reader.peek() != endMap){
+                                    reader.read();
+                                }
+                                reader.read(endMap);
+                            }
                         }
                         reader.read(endObject);
-                        newEntity.addNestedEntity(type, nestedEntity);
+                        newEntity.addNestedEntity(key, nestedEntity);
                     }
                     reader.read(endMap);
                 }
@@ -84,46 +92,102 @@ public class CustomMapper {
             reader.read(endObject);
             entities.add(newEntity);
         }
-        return null;
+        return entities;
+    }
+
+    public String writeValueAsString(Entity e) throws IOException{
+        String string = new String();
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(beginObject);
+
+        builder.append("\n");
+        builder.append(beginWord + "type" + endWord);
+        builder.append(" " + assign + " ");
+        builder.append(beginWord + e.getType() + endWord);
+
+        builder.append("\n");
+        builder.append(beginWord + "id" + endWord);
+        builder.append(" " + assign + " ");
+        builder.append(beginWord + e.getId() + endWord);
+
+        builder.append("\n");
+        builder.append(beginWord + "attributes" + endWord);
+        builder.append(" " + assign + " ");
+        builder.append(beginMap);
+        for (String key: e.getAttributes().keySet()){
+            builder.append("\n");
+            builder.append(beginWord + key + endWord);
+            builder.append(" " + assign + " ");
+            builder.append(beginWord + e.getAttributes().get(key) + endWord);
+        }
+        //builder.append("\n");
+        builder.append(endMap);
+
+        builder.append("\n");
+        builder.append(beginWord + "nestedEntities" + endWord);
+        builder.append(" " + assign + " ");
+        builder.append(beginMap);
+        for (String key: e.getNestedEntities().keySet()){
+            builder.append("\n");
+            builder.append(beginWord + key + endWord);
+            builder.append(" " + assign + " ");
+            builder.append(writeValueAsString(e.getNestedEntities().get(key)));
+        }
+        //builder.append("\n");
+        builder.append(endMap);
+
+        builder.append("\n");
+        builder.append(endObject);
+
+        return builder.toString();
     }
 
     public String writeValueAsString(List <Entity> entities) throws IOException{
-        return null;
-    }
+        String string = new String();
+        StringBuilder builder = new StringBuilder();
+        for(Entity e: entities){
+            builder.append(beginObject);
 
+            builder.append("\n");
+            builder.append(beginWord + "type" + endWord);
+            builder.append(" " + assign + " ");
+            builder.append(beginWord + e.getType() + endWord);
 
-          /*
-            while (jr.peek() == beginObject) {
-                Entity newEntity = new Entity();
-                while (jr.peek() != endObject) {
-                    String name = jr.nextName();
-                    if (name.equals("id"))
-                        newEntity.setId(jr.nextString());
-                    else if (name.equals("type"))
-                        newEntity.setType(jr.nextString());
-                    else if (name.equals("attributes")){
-                    // TODO procitati listu
-                    }
-                    else if (name.equals("nestedEntities")) {
-                        Entity nestedEntity = new Entity();
-                        while (jr.peek() != endObject) {
-                            String nestedName = jr.nextName();
-                            if (nestedName.equals("id"))
-                                nestedEntity.setId(jr.nextString());
-                            else if (nestedName.equals("type"))
-                                nestedEntity.setType(jr.nextString());
-                            else if (nestedName.equals("attributes"){
-                                // TODO procitati listu
-                                nestedEntity.addAttribute(jr.nextName(), jr.nextString());
-                            }
-                        }
-                        newEntity.addNestedEntity(name, nestedEntity);
-                    } else {
-                        newEntity.addAttribute(name, jr.nextString());
-                    }
-                }
-                entities.add(newEntity);
+            builder.append("\n");
+            builder.append(beginWord + "id" + endWord);
+            builder.append(" " + assign + " ");
+            builder.append(beginWord + e.getId() + endWord);
+
+            builder.append("\n");
+            builder.append(beginWord + "attributes" + endWord);
+            builder.append(" " + assign + " ");
+            builder.append(beginMap);
+            for (String key: e.getAttributes().keySet()){
+                builder.append("\n");
+                builder.append(beginWord + key + endWord);
+                builder.append(" " + assign + " ");
+                builder.append(beginWord + e.getAttributes().get(key) + endWord);
             }
+            //builder.append("\n");
+            builder.append(endMap);
 
-      */
+            builder.append("\n");
+            builder.append(beginWord + "nestedEntities" + endWord);
+            builder.append(" " + assign + " ");
+            builder.append(beginMap);
+            for (String key: e.getNestedEntities().keySet()){
+                builder.append("\n");
+                builder.append(beginWord + key + endWord);
+                builder.append(" " + assign + " ");
+                builder.append(writeValueAsString(e.getNestedEntities().get(key)));
+            }
+            //builder.append("\n");
+            builder.append(endMap);
+
+            builder.append("\n");
+            builder.append(endObject);
+        }
+        return builder.toString();
+    }
 }
