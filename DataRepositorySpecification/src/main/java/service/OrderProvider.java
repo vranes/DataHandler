@@ -1,12 +1,15 @@
 package service;
 
-import Exceptions.IdentifierException;
 import model.Database;
 import model.Entity;
-
-import javax.xml.crypto.Data;
 import java.util.List;
 
+/**
+ *  Class that protects data integrity in the database.
+ *  It holds methods for finding the first available file for adding new entities,
+ *  locating entities in the database, checking if an ID is already in use
+ *  and provides support for auto ID
+ */
 public class OrderProvider {
 
     private static OrderProvider instance = null;
@@ -18,7 +21,10 @@ public class OrderProvider {
         return instance;
     }
 
-    public int availableFile(){                                     // nalazi prvi slobodan fajl
+    /**
+     *  Returns the ID of the first file that isn't filled to the maximum capacity
+     */
+    public int availableFile(){
         for(int i = 0; i < database.getFilesNum(); i++){
             List<Entity> fileEntities = database.getFiles().get(i);
             if (fileEntities.size() < database.getMaxEntities())
@@ -27,6 +33,9 @@ public class OrderProvider {
         return database.getFilesNum();
     }
 
+    /**
+     *  Returns the file ID of a file containing the passed entity
+     */
     public Integer locateInFile(Entity entity){
         for(int i = 0; i < database.getFilesNum(); i++){
             List<Entity> fileEntities = database.getFiles().get(i);
@@ -38,7 +47,10 @@ public class OrderProvider {
         return null;
     }
 
-    public boolean isAvailableID(String id) {                     // proverava da li je ID slobodan
+    /**
+     *  Checks if the passed entity ID is already in use
+     */
+    public boolean isAvailableID(String id) {
         for (Entity e: database.getEntities()) {
             if (e.getId().equals(id)){
                 return false;
@@ -47,7 +59,10 @@ public class OrderProvider {
         return true;
     }
 
-    public String autoID(){                                            // nalazi prvi slobodan ID
+    /**
+     *  Provides auto-increment ID by finding the smallest unused int number
+     */
+    public String autoID(){
         for(int i = 0; i <= database.getNumberOfEntities(); i++){
             int flag = 1;
             for (Entity e: database.getEntities())

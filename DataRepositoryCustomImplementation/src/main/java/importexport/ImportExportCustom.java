@@ -4,13 +4,11 @@ import Exceptions.FormatException;
 import model.Entity;
 import service.CustomMapper;
 import utils.FileUtils;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ImportExportCustom implements IImportExport {
-
 
     private static ImportExportCustom instance = null;
 
@@ -20,16 +18,11 @@ public class ImportExportCustom implements IImportExport {
         return instance;
     }
 
-    public String importFile(String sourcePath){
-        String fileString = FileUtils.fileToString(sourcePath);
-
-        return fileString;
-    }
-
+    @Override
     public List<Entity> importEntities(String sourcePath){
         CustomMapper objectMapper = new CustomMapper();
         List<Entity> entities = new ArrayList<>();
-        String fileString = importFile(sourcePath);
+        String fileString = FileUtils.fileToString(sourcePath);
         if (!fileString.isEmpty()) {
             try {
                 entities = objectMapper.readValueAsList(fileString);
@@ -42,17 +35,14 @@ public class ImportExportCustom implements IImportExport {
         return entities;
     }
 
-    public void exportFile(String destinationPath, String fileString){
-        FileUtils.stringToFile(destinationPath, fileString);
-    }
-
+    @Override
     public void exportEntities(String destinationPath, List<Entity> entities) {
 
         CustomMapper objectMapper = new CustomMapper();
         String fileString = new String();
         try {
             fileString = objectMapper.writeValueAsString(entities);
-            exportFile(destinationPath, fileString);
+            FileUtils.stringToFile(destinationPath, fileString);
         } catch (IOException e) {
             e.printStackTrace();
         }

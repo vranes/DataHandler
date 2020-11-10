@@ -4,12 +4,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * Class that stores database entities, keeps track record of files and max number of entities per file
+ */
 public class Database {
 
-    private int maxEntities;        // maksimalan broj entiteta po fajlu
-    private List<Entity> entities;   // lista svih entiteta cele baze (ili trenutnog fajla ? zavisi od implementacije)
+    /**
+     *  maximum number of entities per file
+     */
+    private int maxEntities;
+    /**
+     *  list of all database entities
+     */
+    private List<Entity> entities;
+    /**
+     * map of all files with their belonging entities
+     */
     private Map<Integer, List<Entity>> files;
+    /**
+     *  path to the database root directory
+     */
     private String path;
     private static Database instance = null;
 
@@ -18,6 +32,7 @@ public class Database {
         entities = new ArrayList<>();
         files = new HashMap<>();
     }
+
     public static Database getInstance(){
         if (instance == null)
             instance = new Database();
@@ -38,11 +53,12 @@ public class Database {
 
     public int getFilesNum() { return files.size(); }
 
+    /**
+     * adds a new entity to the database
+     */
     public void addEntity(Entity e) { entities.add(e); }
 
-    public List<Entity> getEntities() {
-
-        return entities; }
+    public List<Entity> getEntities() { return entities; }
 
     public void setEntities(List<Entity> entities) { this.entities = entities; }
 

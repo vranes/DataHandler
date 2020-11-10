@@ -26,9 +26,9 @@ public class ImportExportJson implements IImportExport {
         return jsonString;
     }
 
+    @Override
     public List<Entity> importEntities(String sourcePath){
         ObjectMapper objectMapper = new ObjectMapper();
-
         List<Entity> entities = new ArrayList<>();
         String fileString = importFile(sourcePath);
         if (!fileString.isEmpty()) {
@@ -38,17 +38,15 @@ public class ImportExportJson implements IImportExport {
                 e.printStackTrace();
             }
         }
-
         return entities;
     }
 
     public void exportFile(String destinationPath, String json){
-
         FileUtils.stringToFile(destinationPath, beautifyJson(json));
     }
 
+    @Override
     public void exportEntities(String destinationPath, List<Entity> entities) {
-
         ObjectMapper objectMapper = new ObjectMapper();
         String fileString = new String();
         try {
@@ -60,7 +58,6 @@ public class ImportExportJson implements IImportExport {
     }
 
     private String beautifyJson(String json) {
-
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
         JsonNode tree = null;

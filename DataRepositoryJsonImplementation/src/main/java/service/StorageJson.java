@@ -7,6 +7,8 @@ import importexport.IImportExport;
 import importexport.ImportExportJson;
 import model.Database;
 import model.Entity;
+import utils.FileUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,20 +41,14 @@ public class StorageJson extends AbstractStorage {
             throw new IdentifierException("An entity with id: " + entity.getId() + " already exists");
         }
         int fileNo = OrderProvider.getInstance().availableFile();
-        path += Integer.toString(fileNo);
-
-        IImportExport importExport = ImportExportJson.getInstance();
-
-        List<Entity> entities ;
-        entities = Database.getInstance().getFiles().get(fileNo);
-        entities.add(entity);
-
-        importExport.exportEntities(path, entities);
-
-
-        database.addEntity(entity);
         if (!database.getFiles().containsKey(fileNo))
             database.getFiles().put(fileNo, new ArrayList<Entity>());
+        List<Entity> entities = Database.getInstance().getFiles().get(fileNo);
+        entities.add(entity);
+        path += Integer.toString(fileNo);
+        IImportExport importExport = ImportExportJson.getInstance();
+        importExport.exportEntities(path, entities);
+        database.addEntity(entity);
     }
 
     @Override
@@ -77,7 +73,7 @@ public class StorageJson extends AbstractStorage {
                 }
             }
             String formattedJson = objectMapper.writeValueAsString(array);
-            ImportExportJson.getInstance().exportFile(filePath, formattedJson);
+            FileUtils.stringToFile(filePath, formattedJson);
         } catch (IOException e) {
             e.printStackTrace();
         }

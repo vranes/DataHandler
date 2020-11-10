@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public abstract class AbstractStorage {
 
     // Ideja je da ovde budu metode za CRUD operacije i filtriranje

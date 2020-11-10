@@ -1,7 +1,5 @@
 package service;
 
-
-import com.google.gson.Gson;
 import model.Entity;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;

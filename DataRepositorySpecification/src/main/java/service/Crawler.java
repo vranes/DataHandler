@@ -1,12 +1,13 @@
 package service;
-
 import model.Database;
 import model.Entity;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *  Class with methods for filtering database entities by various criteria
+ */
 public class Crawler {
 
     protected Database database = Database.getInstance();
@@ -18,6 +19,9 @@ public class Crawler {
         return instance;
     }
 
+    /**
+     *  Finds and returns entity with the passed id
+     */
     public Entity findById(String id) {
         for (Entity e: database.getEntities()){
             if (e.getId().equals(id))
@@ -26,6 +30,9 @@ public class Crawler {
         return null;
     }
 
+    /**
+     *  Filters database entities by type
+     */
     public List<Entity> findByType(String type) {
         List <Entity> entityList = new ArrayList<>();
         for (Entity e: database.getEntities()) {
@@ -35,18 +42,11 @@ public class Crawler {
         return entityList;
     }
 
-    /*
- (na primer: vrati sve entitete sa nazivom student koji sadrže ključ
- studijskiProgram i ime im počinje na M),
- */
-
+    /**
+     *  Filters passed entities by posession of the attribute name. Serves for more complex filter queries.
+     */
     public List<Entity> findByAttribute(List<Entity> entities, List<String> names) {
         List <Entity> result = new ArrayList<>();
-        System.out.println(result +" find BY attribute");
-        System.out.println(names +" names find BY attribute");
-        System.out.println(entities +" find BY attribute");
-
-
         for (Entity e: entities) {
             int flag = 0;
             for(String s : names){
@@ -58,17 +58,14 @@ public class Crawler {
             }
             if(flag == 1) result.add(e);
         }
-        System.out.println(result +" find BY attribute end");
-        System.out.println(names +" names find BY attribute end");
-        System.out.println(entities +" find BY attribute end");
         return result;
     }
 
+    /**
+     *  Filters passed entities by a map of attribute name-value pairs. Serves for more complex filter queries.
+     */
     public List<Entity> findByValue(List<Entity> entities, Map<String, String> valMap) {
         List <Entity> result = new ArrayList<>();
-        System.out.println(result +" find BY value ");
-        System.out.println(valMap +" names find BY value ");
-        System.out.println(entities +" find BY value ");
         for (Entity e: entities) {
             int flag = 0;
             for(Map.Entry<String,String> pair : valMap.entrySet()){
@@ -81,9 +78,6 @@ public class Crawler {
             }
             if(flag == 1) result.add(e);
         }
-        System.out.println(result +" find BY value end");
-        System.out.println(valMap +" names find BY value end");
-        System.out.println(entities +" find BY value end");
         return result;
     }
 }

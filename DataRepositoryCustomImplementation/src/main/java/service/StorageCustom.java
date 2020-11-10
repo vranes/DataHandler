@@ -41,34 +41,24 @@ public class StorageCustom extends AbstractStorage{
             throw new IdentifierException("An entity with id: " + entity.getId() + " already exists");
         }
         int fileNo = OrderProvider.getInstance().availableFile();
-        path += Integer.toString(fileNo);
-        IImportExport importExport = ImportExportCustom.getInstance();
-        List<Entity> entities = null;
-        entities = Database.getInstance().getFiles().get(fileNo);
-        entities.add(entity);
-        importExport.exportEntities(path, entities);
-
-        database.addEntity(entity);
         if (!database.getFiles().containsKey(fileNo))
             database.getFiles().put(fileNo, new ArrayList<Entity>());
+        List<Entity> entities = Database.getInstance().getFiles().get(fileNo);
+        entities.add(entity);
+        path += Integer.toString(fileNo);
+        IImportExport importExport = ImportExportCustom.getInstance();
+        importExport.exportEntities(path, entities);
+        database.addEntity(entity);
     }
 
     @Override
     public void delete(String path, Entity entity) throws IdentifierException {
-
         Integer fileNo = OrderProvider.getInstance().locateInFile(entity);
         if(fileNo == null)
             throw new IdentifierException("The entity for deletion doesn't exist");
-        String filename =  Integer.toString(fileNo);
-        String filePath = path.concat(filename);
-        String absolutePath =  filePath;
-        File file = new File(absolutePath);
-        CustomMapper objectMapper = new CustomMapper();
         database.getFiles().get(fileNo).remove(entity);
-
         IImportExport importExport = ImportExportCustom.getInstance();
         importExport.exportEntities(path, database.getFiles().get(fileNo));
-
         database.getEntities().remove(entity);
     }
 
@@ -99,8 +89,7 @@ public class StorageCustom extends AbstractStorage{
     public void addnested(String path, Entity toAdd, String parentId, String key) throws IdentifierException {
         if (OrderProvider.getInstance().isAvailableID(parentId)){
             throw new IdentifierException("An entity with id: " + parentId + " doesnt exists");
-         }
-
+        }
         List <Entity> entities = Database.getInstance().getFiles().get(
                 OrderProvider.getInstance().locateInFile(Crawler.getInstance().findById(parentId))
         );
@@ -112,7 +101,6 @@ public class StorageCustom extends AbstractStorage{
         Database.getInstance().getEntities().add(et);
 
         ImportExportCustom.getInstance().exportEntities(path, entities);
-
     }
 
 }

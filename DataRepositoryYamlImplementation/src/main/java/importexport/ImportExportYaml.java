@@ -27,17 +27,17 @@ public class ImportExportYaml implements IImportExport {
             instance = new ImportExportYaml();
         return instance;
     }
-
+/*
     @Override
     public String importFile(String sourcePath) {
         String yamlString = FileUtils.fileToString(sourcePath);
         return yamlString;
-    }
+    }*/
 
     @Override
     public List<Entity> importEntities(String sourcePath) {
         List<Entity> entities = new ArrayList<>();
-        String fileString = importFile(sourcePath);
+        String fileString = FileUtils.fileToString(sourcePath);
 
         if (!fileString.isEmpty()) {
             entities = yaml.load(fileString);
@@ -46,18 +46,18 @@ public class ImportExportYaml implements IImportExport {
         return entities;
 
     }
-
+/*
     @Override
      public void exportFile(String destinationPath, String data) {
         FileUtils.stringToFile(destinationPath, data);
-    }
+    } */
 
     @Override
     public void exportEntities(String destinationPath, List <Entity> entities) {
         String fileString = new String();
         fileString = yaml.dump(entities);
 
-        exportFile(destinationPath, fileString);
+        FileUtils.stringToFile(destinationPath, fileString);
 
     }
 

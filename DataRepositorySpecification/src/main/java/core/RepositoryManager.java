@@ -4,6 +4,9 @@ import importexport.IImportExport;
 import service.AbstractStorage;
 import service.IObjectConverter;
 
+/**
+ *  Class for providing run-time dependency of implementation components
+ */
 public class RepositoryManager {
 
     private static IImportExport importExport;

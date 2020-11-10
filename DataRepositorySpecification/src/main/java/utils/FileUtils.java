@@ -9,8 +9,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+/**
+ * Class that works directly with files - supports reading and writing operations
+ */
 public class FileUtils {
 
+    /**
+     * Returns string content of a file
+     */
     public static String fileToString(String filePath) {
         StringBuilder contentBuilder = new StringBuilder();
         String absolutePath = filePath;
@@ -36,6 +42,9 @@ public class FileUtils {
         return new String();
     }
 
+    /**
+     *  Writes string content to the file
+     */
     public static void stringToFile(String filePath, String data) {
 
         String absolutePath = filePath;
