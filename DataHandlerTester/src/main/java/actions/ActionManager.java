@@ -7,7 +7,7 @@ public class ActionManager {
 	private SortButtonAction sortButtonAction;
 	private DeleteButtonAction deleteButtonAction;
 	private FilterButtonAction filterButtonAction;
-//	private EditAction editAction;
+	private EditButtonAction  editButtonAction;
 
 	private ActionManager() {
 		initializeActions();
@@ -19,7 +19,7 @@ public class ActionManager {
 		deleteButtonAction = new DeleteButtonAction();
 		filterButtonAction = new FilterButtonAction();
 		sortButtonAction = new SortButtonAction();
-//		editAction - new editAction();
+		editButtonAction = new EditButtonAction();
 	}
 	
 	public static ActionManager getInstance() {
@@ -29,7 +29,10 @@ public class ActionManager {
 		return instance;
 	}
 
-	
+	public EditButtonAction getEditButtonAction() {
+		return editButtonAction;
+	}
+
 	public FilterButtonAction getFilterButtonAction() {
 		return filterButtonAction;
 	}

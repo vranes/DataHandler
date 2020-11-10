@@ -10,7 +10,7 @@ public class Database {
     private int maxEntities;        // maksimalan broj entiteta po fajlu
     private List<Entity> entities;   // lista svih entiteta cele baze (ili trenutnog fajla ? zavisi od implementacije)
     private Map<Integer, List<Entity>> files;
-
+    private String path;
     private static Database instance = null;
 
     private Database(){
@@ -24,6 +24,14 @@ public class Database {
         return instance;
     }
 
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
     public void setMaxEntities(int maxEntities) { this.maxEntities = maxEntities; }
 
     public int getMaxEntities() { return maxEntities; }
@@ -32,7 +40,9 @@ public class Database {
 
     public void addEntity(Entity e) { entities.add(e); }
 
-    public List<Entity> getEntities() { return entities; }
+    public List<Entity> getEntities() {
+
+        return entities; }
 
     public void setEntities(List<Entity> entities) { this.entities = entities; }
 

@@ -2,6 +2,7 @@ package view.frame;
 
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
@@ -20,6 +21,7 @@ public class MainFrame extends JFrame{
 	private JPanel mainPanel;
 	private JPanel scrollPanel;
 	private JButton btnDelete;
+	private JButton btnEdit;
 	private JButton btnAdd;
 	private JButton btnFilter;
 	private JButton btnSort;
@@ -39,32 +41,30 @@ public class MainFrame extends JFrame{
 	private void initialize(){
 		appCore = new AppCore();
 	    actionManager = ActionManager.getInstance();
-        //  JFileChooser jfc = new JFileChooser("./Files");
-//        JPanel p = new JPanel(new GridBagLayout());
-//        JButton confirmBtn  =  new JButton();
-//        GridBagConstraints c = new GridBagConstraints();
-//        c.insets = new Insets(10, 10, 10, 0);
-//        c.fill = GridBagConstraints.HORIZONTAL;
-//
-//        c.gridx = 0;
-//        c.gridy = 0;
-//
-//        p.add(chooser,c);
+	    JFileChooser chooser = new JFileChooser("./Files");
+        JPanel p = new JPanel(new GridBagLayout());
+        JButton confirmBtn  =  new JButton();
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(10, 10, 10, 0);
+        c.fill = GridBagConstraints.HORIZONTAL;
 
-//        if( JOptionPane.showConfirmDialog(null,p,"Fill this form to add",JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION)
-//        {
-//           appCore.getStorage().read(chooser.get)
-//            initializeGUI();
-//        }else initializeGUI();
+        c.gridx = 0;
+        c.gridy = 0;
+
+            chooser.showOpenDialog(null);
+            System.out.println(chooser.getCurrentDirectory().getAbsolutePath());
+            System.out.println(chooser.getCurrentDirectory().getPath());
+            Database.getInstance().setPath(chooser.getCurrentDirectory().getPath()+"/file");
+            appCore.getStorage().loadDatabase(chooser.getCurrentDirectory().getPath());
+
+            initializeGUI();
+
 
 
 
            // File selectedFile = jfc.getCurrentDirectory();
-            List<Entity> entities = new ArrayList<Entity>();
-            appCore.getStorage().loadDatabase("/Files");
-            entities =  Database.getInstance().getEntities();
 
-            initializeGUI();
+
 
     }
 
@@ -74,6 +74,7 @@ public class MainFrame extends JFrame{
         btnDelete = new JButton("Delete");
         btnFilter = new JButton("Filter");
         btnSort = new JButton("Sort");
+        btnEdit = new JButton("Edit");
 
 		mainPanel = new JPanel();
 
@@ -81,6 +82,7 @@ public class MainFrame extends JFrame{
         btnDelete.addActionListener(actionManager.getDeleteButtonAction());
         btnFilter.addActionListener(actionManager.getFilterButtonAction());
         btnSort.addActionListener(actionManager.getSortButtonAction());
+        btnEdit.addActionListener(actionManager.getEditButtonAction());
 
 		Toolkit kit = Toolkit.getDefaultToolkit();
         Dimension screenSize = kit.getScreenSize();
@@ -135,6 +137,12 @@ public class MainFrame extends JFrame{
         c.gridx = 3;
         c.gridy = 1;
         mainPanel.add(btnFilter,c);
+
+        c.weightx = c.weighty = 0;
+        c.fill = GridBagConstraints.NONE;
+        c.gridx = 4;
+        c.gridy = 1;
+        mainPanel.add(btnEdit,c);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(mainPanel);

@@ -5,6 +5,7 @@ import model.Database;
 import model.Entity;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,23 +19,34 @@ public abstract class AbstractStorage {
     public abstract List<Entity> read (String path);
     public abstract void add (String path, Entity entity) throws IdentifierException;
     public abstract void delete(String path, Entity entity) throws IdentifierException;
+    public abstract void refresh(String path,List<Entity> entities) throws IdentifierException;
 
     public void loadDatabase(String path){
 
         int fileNum = 0;
         String filename =  "/file"+Integer.toString(fileNum);
         String filePath = path.concat(filename);
-        String absolutePath = new File("").getAbsolutePath() + filePath;
-        File file = new File(absolutePath);
+        File file = new File(filePath);
         Map<Integer, List<Entity>> files = new HashMap <>();
-
-        while(file.exists()){
-            files.put(fileNum,read(filePath));
-            fileNum++;
-            filename = "/file"+Integer.toString(fileNum);
-            filePath = path.concat(filename);
-            absolutePath = new File("").getAbsolutePath() + filePath;
-            file = new File(absolutePath);
+        System.out.println(filePath);
+        if(file.exists()){
+            while(file.exists()){
+                files.put(fileNum,read(filePath));
+                fileNum++;
+                filename = "/file"+Integer.toString(fileNum);
+                filePath = path.concat(filename);
+                file = new File(filePath);
+            }
+        }
+        else{
+            file.setReadable(true);
+            try {
+                file.createNewFile();
+                files.put(fileNum,read(filePath));
+                fileNum++;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         System.out.println(files);
         Database.getInstance().setFiles(files);

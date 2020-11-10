@@ -4,14 +4,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import Exceptions.IdentifierException;
+import importexport.IImportExport;
 import model.Entity;
 import model.Database;
+import service.OrderProvider;
 import start.AppCore;
 import view.frame.MainFrame;
 
@@ -35,6 +38,8 @@ public class AddButtonAction implements ActionListener {
 		JTextField jfType = new JTextField(5);
 		JTextField jfAttribute = new JTextField(5);
 		JTextField jfNested = new JTextField(5);
+		JTextField jfKey = new JTextField(5);
+		JCheckBox jcbNested = new JCheckBox();
 
 		autoID.addActionListener(new ActionListener() {
 			@Override
@@ -42,6 +47,15 @@ public class AddButtonAction implements ActionListener {
 				if (jfId.isEnabled()) {
 					jfId.setEnabled(false);
 				} else jfId.setEnabled(true);
+			}
+		});
+
+		jcbNested.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (jfKey.isEnabled()) {
+					jfKey.setEnabled(false);
+				} else jfKey.setEnabled(true);
 			}
 		});
 
@@ -55,7 +69,10 @@ public class AddButtonAction implements ActionListener {
 		p.add(jfAttribute);
 		p.add(lblNested);
 		p.add(jfNested);
-
+		p.add(new JLabel("Key: "));
+		p.add(jfKey);
+		p.add(new JLabel(" parent  or child"));
+		p.add(jcbNested);
 		mainPanel.add(p);
 
 		if (JOptionPane.showConfirmDialog(null, mainPanel, "Fill this form to add", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
@@ -82,8 +99,30 @@ public class AddButtonAction implements ActionListener {
 			}
 
 			for (Entity et : Database.getInstance().getEntities()) {
-				if (((JTextField) (p.getComponent(9))).getText().isEmpty()) break;
+				if (((JTextField) (p.getComponent(9))).getText().isEmpty()){
+					ent.setNestedEntities(nestedEntityMap);
+					break;
+				}
 				if (et.getId().contains(((JTextField) (p.getComponent(9))).getText())) {
+					if(!jcbNested.isSelected()){
+						List <Entity> entities = Database.getInstance().getFiles().get(
+								OrderProvider.getInstance().locateInFile(et)
+						);
+						String path  = Database.getInstance().getPath()+MainFrame.getInstance().getAppCore().getOrderProvider().locateInFile(et);
+						System.out.println(path);
+						Database.getInstance().getEntities().remove(et);
+						entities.remove(et);
+						et.getNestedEntities().put(jfKey.getText(),ent);
+						entities.add(et);
+						Database.getInstance().getEntities().add(et);
+						try {
+							MainFrame.getInstance().getAppCore().getStorage().refresh(path, entities);
+						} catch (IdentifierException identifierException) {
+							identifierException.printStackTrace();
+						}
+						MainFrame.getInstance().setJt(MainFrame.getInstance().getAppCore().loadTable(Database.getInstance().getEntities()));
+						return;
+					}
 					nestedEntityMap.put(et.getId(), et);
 					ent.setNestedEntities(nestedEntityMap);
 
@@ -100,7 +139,7 @@ public class AddButtonAction implements ActionListener {
 
 	public void tryAdd(Entity ent) {
 		try {
-			MainFrame.getInstance().getAppCore().getStorage().add("/Files/file", ent);
+			MainFrame.getInstance().getAppCore().getStorage().add(Database.getInstance().getPath(), ent);
 		} catch (IdentifierException e) {
 			JOptionPane.showMessageDialog(MainFrame.getInstance(),e.getMessage());
 		}

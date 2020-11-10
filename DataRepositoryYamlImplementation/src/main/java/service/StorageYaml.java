@@ -8,6 +8,7 @@ import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
+import javax.xml.crypto.Data;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -48,7 +49,6 @@ public class StorageYaml extends AbstractStorage{
         IImportExport importExport = ImportExportYaml.getInstance();
         List<Entity> entities = null;
 
-
         entities = importExport.importEntities(path);
         entities.add(entity);
         importExport.exportEntities(path, entities);
@@ -64,9 +64,9 @@ public class StorageYaml extends AbstractStorage{
         Integer fileNo = OrderProvider.getInstance().locateInFile(entity);
         if(fileNo == null)
             throw new IdentifierException("The entity for deletion doesn't exist");
-        String filename =  "/file"+Integer.toString(fileNo);
+        String filename =  Integer.toString(fileNo);
         String filePath = path.concat(filename);
-        String absolutePath = new File("").getAbsolutePath() + filePath;
+        String absolutePath = filePath;
         File file = new File(absolutePath);
         List<Entity> entities;
         Entity toRemove = null;
@@ -81,6 +81,11 @@ public class StorageYaml extends AbstractStorage{
         }
         entities.remove(toRemove);
         ImportExportYaml.getInstance().exportEntities(filePath,entities);
+    }
+
+    @Override
+    public void refresh(String path, List <Entity> entities) throws IdentifierException {
+        ImportExportYaml.getInstance().exportEntities(path, entities);
     }
 
 }

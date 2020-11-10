@@ -13,7 +13,7 @@ public class FileUtils {
 
     public static String fileToString(String filePath) {
         StringBuilder contentBuilder = new StringBuilder();
-        String absolutePath = new File("").getAbsolutePath() + filePath;
+        String absolutePath = filePath;
         File file = new File(absolutePath);
         file.setReadable(true);
 
@@ -38,7 +38,7 @@ public class FileUtils {
 
     public static void stringToFile(String filePath, String data) {
 
-        String absolutePath = new File("").getAbsolutePath() + filePath;
+        String absolutePath = filePath;
         File file = new File(absolutePath);
         file.setWritable(true);
 
@@ -54,6 +54,7 @@ public class FileUtils {
             // convert string to byte array
             byte[] bytes = data.getBytes();
             // write byte array to file
+            bos.write("".getBytes());
             bos.write(bytes);
             bos.close();
             fos.close();

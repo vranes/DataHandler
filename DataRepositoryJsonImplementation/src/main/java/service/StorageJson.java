@@ -40,16 +40,20 @@ public class StorageJson extends AbstractStorage {
         }
         int fileNo = OrderProvider.getInstance().availableFile();
         path += Integer.toString(fileNo);
+
         IImportExport importExport = ImportExportJson.getInstance();
-        List<Entity> entities = null;
+
+        List<Entity> entities ;
         entities = Database.getInstance().getFiles().get(fileNo);
+        System.out.println(entities + "----------");
         entities.add(entity);
+
         importExport.exportEntities(path, entities);
+
 
         database.addEntity(entity);
         if (!database.getFiles().containsKey(fileNo))
             database.getFiles().put(fileNo, new ArrayList<Entity>());
-        database.getFiles().get(fileNo).add(entity);
     }
 
     @Override
@@ -58,9 +62,9 @@ public class StorageJson extends AbstractStorage {
         Integer fileNo = OrderProvider.getInstance().locateInFile(entity);
         if(fileNo == null)
             throw new IdentifierException("The entity for deletion doesn't exist");
-        String filename =  "/file"+Integer.toString(fileNo);
+        String filename =  Integer.toString(fileNo);
         String filePath = path.concat(filename);
-        String absolutePath = new File("").getAbsolutePath() + filePath;
+        String absolutePath = filePath;
         File file = new File(absolutePath);
         ObjectMapper objectMapper = new ObjectMapper();
         ArrayNode array = null;
@@ -115,5 +119,8 @@ public class StorageJson extends AbstractStorage {
         } catch (IOException e) {
             e.printStackTrace();
         } */
-
+          @Override
+          public void refresh(String path, List <Entity> entities) throws IdentifierException {
+              ImportExportJson.getInstance().exportEntities(path, entities);
+          }
 }

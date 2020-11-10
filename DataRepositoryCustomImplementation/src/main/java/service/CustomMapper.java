@@ -128,6 +128,7 @@ public class CustomMapper {
         builder.append(beginWord + "nestedEntities" + endWord);
         builder.append(" " + assign + " ");
         builder.append(beginMap);
+        System.out.println(e.getNestedEntities().keySet());
         for (String key: e.getNestedEntities().keySet()){
             builder.append("\n");
             builder.append(beginWord + key + endWord);

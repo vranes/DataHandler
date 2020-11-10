@@ -43,6 +43,7 @@ public class ImportExportJson implements IImportExport {
     }
 
     public void exportFile(String destinationPath, String json){
+
         FileUtils.stringToFile(destinationPath, beautifyJson(json));
     }
 
