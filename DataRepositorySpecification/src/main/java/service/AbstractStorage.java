@@ -19,7 +19,8 @@ public abstract class AbstractStorage {
     public abstract List<Entity> read (String path);
     public abstract void add (String path, Entity entity) throws IdentifierException;
     public abstract void delete(String path, Entity entity) throws IdentifierException;
-    public abstract void refresh(String path,List<Entity> entities) throws IdentifierException;
+    public abstract void refresh(Entity ent, String path) throws IdentifierException;
+    public abstract void addnested(String path, Entity toAdd,String parentId,String key) throws IdentifierException;
 
     public void loadDatabase(String path){
 
@@ -28,7 +29,6 @@ public abstract class AbstractStorage {
         String filePath = path.concat(filename);
         File file = new File(filePath);
         Map<Integer, List<Entity>> files = new HashMap <>();
-        System.out.println(filePath);
         if(file.exists()){
             while(file.exists()){
                 files.put(fileNum,read(filePath));

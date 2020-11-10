@@ -85,27 +85,15 @@ public class EditButtonAction implements ActionListener {
                     break;
                 }
             }
-            Entity toEdit = Crawler.getInstance().findById(ent.getId());
 
-
-            List <Entity> entities = Database.getInstance().getFiles().get(
-                    OrderProvider.getInstance().locateInFile(toEdit)
-            );
-            String path  = Database.getInstance().getPath()+MainFrame.getInstance().getAppCore().getOrderProvider().locateInFile(toEdit);
-            System.out.println(path);
-            Database.getInstance().getEntities().remove(toEdit);
-            entities.remove(toEdit);
-            toEdit.setType(ent.getType());
-            toEdit.setNestedEntities(ent.getNestedEntities());
-            toEdit.setAttributes(ent.getAttributes());
-            entities.add(toEdit);
-            Database.getInstance().getEntities().add(toEdit);
             try {
-
-                MainFrame.getInstance().getAppCore().getStorage().refresh(path, entities);
+                MainFrame.getInstance().getAppCore().getStorage().refresh(ent,Database.getInstance().getPath()+
+                        MainFrame.getInstance().getAppCore().getOrderProvider().locateInFile(
+                                Crawler.getInstance().findById(ent.getId())));
             } catch (IdentifierException identifierException) {
-                identifierException.printStackTrace();
+                JOptionPane.showMessageDialog(null,identifierException.getMessage());
             }
+
 
             MainFrame.getInstance().setJt(MainFrame.getInstance().getAppCore().loadTable(Database.getInstance().getEntities()));
 

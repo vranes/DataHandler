@@ -135,7 +135,6 @@ public class FilterButtonAction implements ActionListener{
 				if(!jfType.getText().equals("")) typeFlag = 1;
 				if(!jfAttribute.getText().equals("")) attrFlag = 1;
 				if(!jfNested.getText().equals("")) nestedFlag = 1;
-				System.out.println(typeFlag +" "+ attrFlag+" "+ nestedFlag);
 
 				if(typeFlag == 1 && attrFlag == 1 && nestedFlag == 1){
 
@@ -186,17 +185,10 @@ public class FilterButtonAction implements ActionListener{
 				String childValue = kv[2];
 				List<Entity> ToFilternew = new ArrayList <>();
 				for(Entity entity: toFilter){
-
 					if(entity.getNestedEntities().get(parentKey) != null){
-						System.out.println(entity.getNestedEntities().get(parentKey)+"----");
 						if(entity.getNestedEntities().get(parentKey).getAttributes().get(childKey) != null){
-							System.out.println(entity.getNestedEntities().get(parentKey).getAttributes().get(childKey)+" 22222");
-
 							if(entity.getNestedEntities().get(parentKey).getAttributes().get(childKey).equals(childValue) ){
-
-								System.out.println(entity.getNestedEntities().get(parentKey).getAttributes().get(childKey).equals(childValue));
 								ToFilternew.add(entity);
-
 							}
 						}
 					}

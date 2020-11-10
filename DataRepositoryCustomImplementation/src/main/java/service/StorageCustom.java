@@ -71,8 +71,48 @@ public class StorageCustom extends AbstractStorage{
 
         database.getEntities().remove(entity);
     }
+
     @Override
-    public void refresh(String path, List <Entity> entities) throws IdentifierException {
+    public void refresh(Entity ent, String path) throws IdentifierException {
+        if (OrderProvider.getInstance().isAvailableID(ent.getId())){
+            throw new IdentifierException("An entity with id: " + ent.getId() + " doesnt exists");}
+        Entity toEdit = Crawler.getInstance().findById(ent.getId());
+
+        List <Entity> entities = Database.getInstance().getFiles().get(
+                OrderProvider.getInstance().locateInFile(toEdit)
+        );
+        Database.getInstance().getEntities().remove(toEdit);
+        entities.remove(toEdit);
+        if(!ent.getType().equals(""))
+            toEdit.setType(ent.getType());
+        if(!ent.getNestedEntities().isEmpty())
+            toEdit.setNestedEntities(ent.getNestedEntities());
+        if(!ent.getAttributes().isEmpty())
+            toEdit.setAttributes(ent.getAttributes());
+        entities.add(toEdit);
+        Database.getInstance().getEntities().add(toEdit);
+
         ImportExportCustom.getInstance().exportEntities(path, entities);
     }
+
+    @Override
+    public void addnested(String path, Entity toAdd, String parentId, String key) throws IdentifierException {
+        if (OrderProvider.getInstance().isAvailableID(parentId)){
+            throw new IdentifierException("An entity with id: " + parentId + " doesnt exists");
+         }
+
+        List <Entity> entities = Database.getInstance().getFiles().get(
+                OrderProvider.getInstance().locateInFile(Crawler.getInstance().findById(parentId))
+        );
+        Entity et = Crawler.getInstance().findById(parentId);
+        Database.getInstance().getEntities().remove(et);
+        entities.remove(et);
+        et.getNestedEntities().put(key,toAdd);
+        entities.add(et);
+        Database.getInstance().getEntities().add(et);
+
+        ImportExportCustom.getInstance().exportEntities(path, entities);
+
+    }
+
 }

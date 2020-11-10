@@ -37,12 +37,9 @@ public class Main {
 
         try {
             String s = CustomMapper.getInstance().writeValueAsString(list);
-            System.out.println(s);
             List entities = new ArrayList<>();
             entities.addAll(CustomMapper.getInstance().readValueAsList(s));
-            System.out.println(entities);
             String s2 = CustomMapper.getInstance().writeValueAsString(entities);
-            System.out.println(s2);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (FormatException e) {

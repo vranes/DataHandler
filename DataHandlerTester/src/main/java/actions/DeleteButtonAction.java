@@ -82,7 +82,6 @@ public class DeleteButtonAction implements ActionListener {
             Map <String,String> attributesMap = new HashMap <>();
             String attributes = ((JTextField) (p.getComponent(5))).getText();
             String[] res = attributes.split("[,]", 0);
-            System.out.println(res[0] +"  lalal   "+res.length);
 
             if (res.length > 0 && !res[0].equals("")) {
                 int k = 0;

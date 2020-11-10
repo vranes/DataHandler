@@ -44,7 +44,6 @@ public class SortButtonAction implements ActionListener {
         mainPanel.add(p);
         if( JOptionPane.showConfirmDialog(null,mainPanel,"Fill this form to delete",JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION)
         {
-            System.out.println(jcmbId.getSelectedItem());
             if(jcbId.isSelected() && jcbType.isSelected()) {
                 if(jcmbId.getSelectedItem().equals("Ascending") && jcmbType.getSelectedItem().equals("Ascending"))
                     Collections.sort(ents, Comparator.comparing(Entity::abcd).thenComparing(Entity::getType));

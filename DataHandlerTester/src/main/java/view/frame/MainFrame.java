@@ -52,8 +52,6 @@ public class MainFrame extends JFrame{
         c.gridy = 0;
 
             chooser.showOpenDialog(null);
-            System.out.println(chooser.getCurrentDirectory().getAbsolutePath());
-            System.out.println(chooser.getCurrentDirectory().getPath());
             Database.getInstance().setPath(chooser.getCurrentDirectory().getPath()+"/file");
             appCore.getStorage().loadDatabase(chooser.getCurrentDirectory().getPath());
 

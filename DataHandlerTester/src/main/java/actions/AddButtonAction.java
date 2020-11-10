@@ -14,6 +14,7 @@ import Exceptions.IdentifierException;
 import importexport.IImportExport;
 import model.Entity;
 import model.Database;
+import service.Crawler;
 import service.OrderProvider;
 import start.AppCore;
 import view.frame.MainFrame;
@@ -103,29 +104,23 @@ public class AddButtonAction implements ActionListener {
 					ent.setNestedEntities(nestedEntityMap);
 					break;
 				}
-				if (et.getId().contains(((JTextField) (p.getComponent(9))).getText())) {
+				if(!jfNested.getText().equals("")){
 					if(!jcbNested.isSelected()){
-						List <Entity> entities = Database.getInstance().getFiles().get(
-								OrderProvider.getInstance().locateInFile(et)
-						);
-						String path  = Database.getInstance().getPath()+MainFrame.getInstance().getAppCore().getOrderProvider().locateInFile(et);
-						System.out.println(path);
-						Database.getInstance().getEntities().remove(et);
-						entities.remove(et);
-						et.getNestedEntities().put(jfKey.getText(),ent);
-						entities.add(et);
-						Database.getInstance().getEntities().add(et);
 						try {
-							MainFrame.getInstance().getAppCore().getStorage().refresh(path, entities);
+							MainFrame.getInstance().getAppCore().getStorage().addnested(Database.getInstance().getPath()+
+									MainFrame.getInstance().getAppCore().getOrderProvider().locateInFile(
+											Crawler.getInstance().findById(jfNested.getText())),
+									ent, jfNested.getText(), jfKey.getText());
 						} catch (IdentifierException identifierException) {
 							identifierException.printStackTrace();
 						}
 						MainFrame.getInstance().setJt(MainFrame.getInstance().getAppCore().loadTable(Database.getInstance().getEntities()));
 						return;
 					}
+				}
+				if (et.getId().contains(((JTextField) (p.getComponent(9))).getText())) {
 					nestedEntityMap.put(et.getId(), et);
 					ent.setNestedEntities(nestedEntityMap);
-
 					break;
 				}
 			}
