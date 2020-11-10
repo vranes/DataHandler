@@ -14,7 +14,6 @@ public class ActionManager {
 	}
 	
 	private void initializeActions() {
-
 		addButtonAction = new AddButtonAction();
 		deleteButtonAction = new DeleteButtonAction();
 		filterButtonAction = new FilterButtonAction();
@@ -46,6 +45,5 @@ public class ActionManager {
 	}
 
 	public SortButtonAction getSortButtonAction(){return sortButtonAction;}
-
 
 }

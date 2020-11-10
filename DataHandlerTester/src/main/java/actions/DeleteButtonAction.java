@@ -105,14 +105,12 @@ public class DeleteButtonAction implements ActionListener {
 
                 if(!jfType.getText().equals("")) typeFlag = 1;
                 if(!jfAttribute.getText().equals("")) attrFlag = 1;
-                System.out.println(typeFlag +"  "+ attrFlag);
                 if(typeFlag == 1 && attrFlag == 1){
                     toDelete = MainFrame.getInstance().getAppCore().getCrawler().findByType(typeToDelete);
                     toDelete = checkAttribute(attributesMap,toDelete);
                     toDelete = checkValue(attributesMap,toDelete);
                 }
                 else if(typeFlag == 0 && attrFlag == 1){
-                    System.out.println("??????");
                     toDelete = Database.getInstance().getEntities();
                     toDelete = checkAttribute(attributesMap,toDelete);
                     toDelete = checkValue(attributesMap,toDelete);
@@ -133,7 +131,6 @@ public class DeleteButtonAction implements ActionListener {
                 }
             }
 
-          //  MainFrame.getInstance().getAppCore().getStorage().add("/Files/file",ent); TODO REMOVE
             MainFrame.getInstance().setJt(MainFrame.getInstance().getAppCore().loadTable(Database.getInstance().getEntities()));
         }
 
@@ -142,7 +139,6 @@ public class DeleteButtonAction implements ActionListener {
 
     public List<Entity> checkAttribute(Map<String, String> attributesMap, List<Entity> toDelete){
         List<String> keys = new ArrayList <>();
-        System.out.println(attributesMap);
         for(Map.Entry<String,String> pair : attributesMap.entrySet()){
            keys.add(pair.getKey());
         }

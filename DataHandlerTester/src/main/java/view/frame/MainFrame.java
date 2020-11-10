@@ -93,7 +93,6 @@ public class MainFrame extends JFrame{
 
 
         jt = appCore.loadTable(Database.getInstance().getEntities());
-        System.out.println(Database.getInstance().getEntities());
         jt.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         jt.setDefaultEditor(Object.class, null);
 

@@ -56,7 +56,7 @@ public class EditButtonAction implements ActionListener {
 
             if (jfId.isEnabled()) {
                 ent.setId(((JTextField) (p.getComponent(1))).getText());
-            } else ent.setId(MainFrame.getInstance().getAppCore().getOrderProvider().autoID()); //TODO Auto Generate ID
+            } else ent.setId(MainFrame.getInstance().getAppCore().getOrderProvider().autoID());
 
             ent.setType(((JTextField) (p.getComponent(3))).getText());
 
@@ -96,8 +96,6 @@ public class EditButtonAction implements ActionListener {
 
 
             MainFrame.getInstance().setJt(MainFrame.getInstance().getAppCore().loadTable(Database.getInstance().getEntities()));
-
-           // tryAdd(ent);
 
         }
     }

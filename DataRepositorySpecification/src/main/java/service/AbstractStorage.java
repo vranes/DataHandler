@@ -49,7 +49,6 @@ public abstract class AbstractStorage {
                 e.printStackTrace();
             }
         }
-        System.out.println(files);
         Database.getInstance().setFiles(files);
     }
 

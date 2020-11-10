@@ -158,14 +158,12 @@ public class FilterButtonAction implements ActionListener{
 
 				}
 				else if(typeFlag == 0 && attrFlag == 0 && nestedFlag == 1){
-					System.out.println("??");
 					toFilter = checkNested(jfNested.getText(), Database.getInstance().getEntities());
 				}
 				else if(typeFlag == 0 && attrFlag == 0 && nestedFlag == 0){
 					JOptionPane.showMessageDialog(MainFrame.getInstance(),"Nista nije odabrano za brisanje");
 				}
 			}
-			System.out.println(toFilter);
 
 			if(!toFilter.isEmpty() )
 				MainFrame.getInstance().setJt(MainFrame.getInstance().getAppCore().loadTable(toFilter));
@@ -202,7 +200,6 @@ public class FilterButtonAction implements ActionListener{
 
 	public List<Entity> checkAttribute(Map<String, String> attributesMap, List<Entity> toFilter){
 		List<String> keys = new ArrayList <>();
-		System.out.println(attributesMap);
 		for(Map.Entry<String,String> pair : attributesMap.entrySet()){
 			keys.add(pair.getKey());
 		}

@@ -1,23 +1,16 @@
 package actions;
 
+import Exceptions.IdentifierException;
+import model.Database;
+import model.Entity;
+import service.Crawler;
+import view.frame.MainFrame;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-
-import Exceptions.IdentifierException;
-import importexport.IImportExport;
-import model.Entity;
-import model.Database;
-import service.Crawler;
-import service.OrderProvider;
-import start.AppCore;
-import view.frame.MainFrame;
 
 public class AddButtonAction implements ActionListener {
 
@@ -25,24 +18,25 @@ public class AddButtonAction implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		JPanel mainPanel = new JPanel(new GridBagLayout());
+		JPanel p = new JPanel(new FlowLayout());
 		JLabel lblAutoId = new JLabel("AutoID:");
 		JLabel lblId = new JLabel("ID:");
 		JLabel lblType = new JLabel("Type:");
 		JLabel lblAttribute = new JLabel("Attribute:");
 		JLabel lblNested = new JLabel("Nested:");
+		JLabel lblKey = new JLabel("Key:");
+		JLabel lblPC = new JLabel("Parenr/Child:");
 
 
-		JCheckBox autoID = new JCheckBox();
-
-		JPanel p = new JPanel(new FlowLayout());
 		JTextField jfId = new JTextField(5);
 		JTextField jfType = new JTextField(5);
 		JTextField jfAttribute = new JTextField(5);
 		JTextField jfNested = new JTextField(5);
 		JTextField jfKey = new JTextField(5);
+		JCheckBox jcbID = new JCheckBox();
 		JCheckBox jcbNested = new JCheckBox();
 
-		autoID.addActionListener(new ActionListener() {
+		jcbID.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (jfId.isEnabled()) {
@@ -61,7 +55,7 @@ public class AddButtonAction implements ActionListener {
 		});
 
 		p.add(lblAutoId);
-		p.add(autoID);
+		p.add(jcbID);
 		p.add(lblId);
 		p.add(jfId);
 		p.add(lblType);
@@ -70,9 +64,9 @@ public class AddButtonAction implements ActionListener {
 		p.add(jfAttribute);
 		p.add(lblNested);
 		p.add(jfNested);
-		p.add(new JLabel("Key: "));
+		p.add(lblKey);
 		p.add(jfKey);
-		p.add(new JLabel(" parent  or child"));
+		p.add(lblPC);
 		p.add(jcbNested);
 		mainPanel.add(p);
 
@@ -81,12 +75,14 @@ public class AddButtonAction implements ActionListener {
 			Map <String, Entity> nestedEntityMap = new HashMap <>();
 
 			if (jfId.isEnabled()) {
-				ent.setId(((JTextField) (p.getComponent(3))).getText());
-			} else ent.setId(MainFrame.getInstance().getAppCore().getOrderProvider().autoID()); //TODO Auto Generate ID
+				ent.setId(jfId.getText());
+			} else ent.setId(MainFrame.getInstance().getAppCore().getOrderProvider().autoID());
 
-			ent.setType(((JTextField) (p.getComponent(5))).getText());
 
-			String attributes = ((JTextField) (p.getComponent(7))).getText();
+			ent.setType(jfType.getText());
+
+
+			String attributes = (jfAttribute).getText();
 			String[] res = attributes.split("[,]", 0);
 
 			if (res.length > 0 && !res[0].equals("")) {
@@ -99,8 +95,9 @@ public class AddButtonAction implements ActionListener {
 				}
 			}
 
+
 			for (Entity et : Database.getInstance().getEntities()) {
-				if (((JTextField) (p.getComponent(9))).getText().isEmpty()){
+				if (jfNested.getText().isEmpty()){
 					ent.setNestedEntities(nestedEntityMap);
 					break;
 				}
@@ -112,13 +109,13 @@ public class AddButtonAction implements ActionListener {
 											Crawler.getInstance().findById(jfNested.getText())),
 									ent, jfNested.getText(), jfKey.getText());
 						} catch (IdentifierException identifierException) {
-							identifierException.printStackTrace();
+							JOptionPane.showMessageDialog(MainFrame.getInstance(),identifierException.getMessage());
 						}
 						MainFrame.getInstance().setJt(MainFrame.getInstance().getAppCore().loadTable(Database.getInstance().getEntities()));
 						return;
 					}
 				}
-				if (et.getId().contains(((JTextField) (p.getComponent(9))).getText())) {
+				if (et.getId().contains(jfNested.getText())) {
 					nestedEntityMap.put(et.getId(), et);
 					ent.setNestedEntities(nestedEntityMap);
 					break;
