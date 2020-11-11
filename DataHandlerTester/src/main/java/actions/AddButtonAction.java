@@ -1,10 +1,10 @@
 package actions;
 
-import Exceptions.IdentifierException;
 import model.Database;
 import model.Entity;
 import service.Crawler;
 import view.frame.MainFrame;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -36,13 +36,8 @@ public class AddButtonAction implements ActionListener {
 		JCheckBox jcbID = new JCheckBox();
 		JCheckBox jcbNested = new JCheckBox();
 
-		jcbID.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (jfId.isEnabled()) {
-					jfId.setEnabled(false);
-				} else jfId.setEnabled(true);
-			}
+		jcbID.addActionListener(e1 -> {
+			jfId.setEnabled(!jfId.isEnabled());
 		});
 
 		p.add(lblAutoId);
