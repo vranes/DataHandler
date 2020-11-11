@@ -29,7 +29,7 @@ public class CustomMapper {
         return instance;
     }
 
-    public List<Entity> readValueAsList(String string) throws IOException, FormatException {
+    public List<Entity> readValueAsList(String string) throws FormatException {
         ArrayList<Entity> entities = new ArrayList<>();
         CustomReader reader = new CustomReader(string, beginWord, endWord, assign);
         while (reader.read() == beginObject) {
@@ -95,8 +95,7 @@ public class CustomMapper {
         return entities;
     }
 
-    public String writeValueAsString(Entity e) throws IOException{
-        String string = new String();
+    public String writeValueAsString (Entity e) {
         StringBuilder builder = new StringBuilder();
 
         builder.append(beginObject);
@@ -143,8 +142,7 @@ public class CustomMapper {
         return builder.toString();
     }
 
-    public String writeValueAsString(List <Entity> entities) throws IOException{
-        String string = new String();
+    public String writeValueAsString(List <Entity> entities) {
         StringBuilder builder = new StringBuilder();
         for(Entity e: entities){
             builder.append(beginObject);

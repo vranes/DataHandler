@@ -16,114 +16,56 @@ import java.util.List;
 import java.util.Map;
 
 public class StorageYaml extends AbstractStorage{
-    Yaml yaml = new Yaml();
+
     private static StorageYaml instance = null;
 
-    public static StorageYaml getInstance(){           // TODO da li da bude instanca interfejsa
+    public static AbstractStorage getInstance(){
         if (instance == null)
             instance = new StorageYaml();
         return instance;
     }
 
     @Override
-    public List<Entity> read(String path) {
+    public List<Entity> read(String path) throws Exception {
         List<Entity> entities = new ArrayList<>();
-
         IImportExport importExport = ImportExportYaml.getInstance();
         entities = importExport.importEntities(path);
         for(Entity e : entities)
-            Database.getInstance().addEntity(e);// ove dve linije dodate
-
+            Database.getInstance().addEntity(e);
         return entities;
     }
 
     @Override
-    public void add(String path, Entity entity) throws IdentifierException {
+    public void add(String path, Entity entity) throws Exception {
         if (!OrderProvider.getInstance().isAvailableID(entity.getId())){
             throw new IdentifierException("An entity with id: " + entity.getId() + " already exists");
         }
-
         int fileNo = OrderProvider.getInstance().availableFile();
-        path += Integer.toString(fileNo);
-
-        IImportExport importExport = ImportExportYaml.getInstance();
-        List<Entity> entities = null;
-
-        entities = importExport.importEntities(path);
-        entities.add(entity);
-        importExport.exportEntities(path, entities);
-
-        database.addEntity(entity);
         if (!database.getFiles().containsKey(fileNo))
             database.getFiles().put(fileNo, new ArrayList<Entity>());
-        database.getFiles().get(fileNo).add(entity);
+        List<Entity> entities = Database.getInstance().getFiles().get(fileNo);
+        entities.add(entity);
+        String filePath = path + fileNo;
+        IImportExport importExport = ImportExportYaml.getInstance();
+        importExport.exportEntities(filePath, entities);
+        database.addEntity(entity);
     }
 
     @Override
-    public void delete(String path, Entity entity) throws IdentifierException {
+    public void delete(String path, Entity entity) throws Exception {
         Integer fileNo = OrderProvider.getInstance().locateInFile(entity);
         if(fileNo == null)
             throw new IdentifierException("The entity for deletion doesn't exist");
-        String filename =  Integer.toString(fileNo);
-        String filePath = path.concat(filename);
-        String absolutePath = filePath;
-        File file = new File(absolutePath);
-        List<Entity> entities;
-        Entity toRemove = null;
-        entities = ImportExportYaml.getInstance().importEntities(filePath);
-        Database.getInstance().getEntities().remove(entity);
-
-        for(Entity i : entities){
-            if(i.getId().equals(entity.getId())) {
-                toRemove = i;
-                break;
-            }
-        }
-        entities.remove(toRemove);
-        ImportExportYaml.getInstance().exportEntities(filePath,entities);
+        List<Entity> entities = database.getFiles().get(fileNo);
+        entities.remove(entity);
+        String filePath = path + fileNo;
+        ImportExportYaml.getInstance().exportEntities(filePath, entities);
+        database.getEntities().remove(entity);
     }
 
     @Override
-    public void refresh(Entity ent, String path) throws IdentifierException {
-        if (OrderProvider.getInstance().isAvailableID(ent.getId())){
-            throw new IdentifierException("An entity with id: " + ent.getId() + " doesnt exists");}
-        Entity toEdit = Crawler.getInstance().findById(ent.getId());
-
-        List <Entity> entities = Database.getInstance().getFiles().get(
-                OrderProvider.getInstance().locateInFile(toEdit)
-        );
-        Database.getInstance().getEntities().remove(toEdit);
-        entities.remove(toEdit);
-        if(!ent.getType().equals(""))
-            toEdit.setType(ent.getType());
-        if(!ent.getNestedEntities().isEmpty())
-          toEdit.setNestedEntities(ent.getNestedEntities());
-        if(!ent.getAttributes().isEmpty())
-            toEdit.setAttributes(ent.getAttributes());
-        entities.add(toEdit);
-        Database.getInstance().getEntities().add(toEdit);
-
+    public void refreshFile(List <Entity> entities, String path) throws Exception {
         ImportExportYaml.getInstance().exportEntities(path, entities);
-
-    }
-
-    @Override
-    public void addnested(String path, Entity toAdd, String parentId, String key) throws IdentifierException {
-        if (OrderProvider.getInstance().isAvailableID(parentId)){
-            throw new IdentifierException("An entity with id: " + parentId + " doesnt exists");}
-
-        List <Entity> entities = Database.getInstance().getFiles().get(
-                OrderProvider.getInstance().locateInFile(Crawler.getInstance().findById(parentId))
-        );
-        Entity et = Crawler.getInstance().findById(parentId);
-        Database.getInstance().getEntities().remove(et);
-        entities.remove(et);
-        et.getNestedEntities().put(key,toAdd);
-        entities.add(et);
-        Database.getInstance().getEntities().add(et);
-
-        ImportExportYaml.getInstance().exportEntities(path, entities);
-
     }
 
 }

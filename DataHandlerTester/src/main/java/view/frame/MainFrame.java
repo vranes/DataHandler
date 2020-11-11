@@ -51,19 +51,16 @@ public class MainFrame extends JFrame{
         c.gridx = 0;
         c.gridy = 0;
 
-            chooser.showOpenDialog(null);
+            chooser.showDialog(null,"Open");
             Database.getInstance().setPath(chooser.getCurrentDirectory().getPath()+"/file");
+        try {
             appCore.getStorage().loadDatabase(chooser.getCurrentDirectory().getPath());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,e.getMessage());
+        }
 
-            initializeGUI();
-
-
-
-
+        initializeGUI();
            // File selectedFile = jfc.getCurrentDirectory();
-
-
-
     }
 
 

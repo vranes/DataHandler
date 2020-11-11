@@ -27,18 +27,12 @@ public class EditButtonAction implements ActionListener {
         JLabel lblAttribute = new JLabel("Attribute:");
         JLabel lblNested = new JLabel("Nested:");
 
-
-
         JPanel p = new JPanel(new FlowLayout());
         JTextField jfId = new JTextField(5);
         JTextField jfType = new JTextField(5);
         JTextField jfAttribute = new JTextField(5);
         JTextField jfNested = new JTextField(5);
         JTextField jfKey = new JTextField(5);
-
-
-
-
 
         p.add(lblId);
         p.add(jfId);
@@ -50,7 +44,7 @@ public class EditButtonAction implements ActionListener {
         p.add(jfNested);
         mainPanel.add(p);
 
-        if (JOptionPane.showConfirmDialog(null, mainPanel, "Fill this form to add", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+        if (JOptionPane.showConfirmDialog(null, mainPanel, "Fill this form to edit", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
             Entity ent = new Entity();
             Map <String, Entity> nestedEntityMap = new HashMap <>();
 
@@ -90,7 +84,7 @@ public class EditButtonAction implements ActionListener {
                 MainFrame.getInstance().getAppCore().getStorage().refresh(ent,Database.getInstance().getPath()+
                         MainFrame.getInstance().getAppCore().getOrderProvider().locateInFile(
                                 Crawler.getInstance().findById(ent.getId())));
-            } catch (IdentifierException identifierException) {
+            } catch (Exception identifierException) {
                 JOptionPane.showMessageDialog(null,identifierException.getMessage());
             }
 

@@ -17,60 +17,41 @@ public class FileUtils {
     /**
      * Returns string content of a file
      */
-    public static String fileToString(String filePath) {
+    public static String fileToString(String filePath) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();
         String absolutePath = filePath;
         File file = new File(absolutePath);
         file.setReadable(true);
-
-        if(file.exists()){
-            try (Stream<String> stream = Files.lines(Paths.get(absolutePath),
-                    StandardCharsets.UTF_8)) {
-                stream.forEach(s -> contentBuilder.append(s).append("\n"));
-                return contentBuilder.toString();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if(!file.exists()){
+            file.createNewFile();
+            return new String();
         }
-        else {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return new String();
+        Stream<String> stream = Files.lines(Paths.get(absolutePath), StandardCharsets.UTF_8);
+        stream.forEach(s -> contentBuilder.append(s).append("\n"));
+        return contentBuilder.toString();
     }
 
     /**
      *  Writes string content to the file
      */
-    public static void stringToFile(String filePath, String data) {
+    public static void stringToFile(String filePath, String data) throws IOException {
 
         String absolutePath = filePath;
         File file = new File(absolutePath);
         file.setWritable(true);
 
         if(!file.exists()){
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            file.createNewFile();
         }
-        try (FileOutputStream fos = new FileOutputStream(file);
-             BufferedOutputStream bos = new BufferedOutputStream(fos)) {
-            // convert string to byte array
-            byte[] bytes = data.getBytes();
-            // write byte array to file
-            bos.write("".getBytes());
-            bos.write(bytes);
-            bos.close();
-            fos.close();
-            System.out.print("Data written to file successfully.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FileOutputStream fos = new FileOutputStream(file);
+        BufferedOutputStream bos = new BufferedOutputStream(fos);
+        // convert string to byte array
+        byte[] bytes = data.getBytes();
+        // write byte array to file
+        bos.write("".getBytes());
+        bos.write(bytes);
+        bos.close();
+        fos.close();
     }
 
 }

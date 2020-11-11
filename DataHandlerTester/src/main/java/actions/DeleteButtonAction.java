@@ -126,7 +126,7 @@ public class DeleteButtonAction implements ActionListener {
                 try {
                     MainFrame.getInstance().getAppCore().getStorage().delete(Database.getInstance()
                             .getPath(),toDelete.get(i));
-                } catch (IdentifierException identifierException) {
+                } catch (Exception identifierException) {
                     JOptionPane.showMessageDialog(MainFrame.getInstance(),identifierException.getMessage());
                 }
             }

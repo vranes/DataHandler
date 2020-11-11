@@ -5,7 +5,7 @@ import Exceptions.FormatException;
 public class CustomReader {
 
     private int pos;
-    private String string = null;
+    private String string;
     private char beginWord;
     private char endWord;
     private char assign;
@@ -41,7 +41,7 @@ public class CustomReader {
     public void read(char c) throws FormatException{
         readSpace();
         if (read() != c)
-            throw new FormatException("Custom Format exception, looked for: " + c + ", found: " + string.charAt(pos) + ".");
+            throw new FormatException("Expected Custom format not found");
     }
 
     public String nextName() throws FormatException {

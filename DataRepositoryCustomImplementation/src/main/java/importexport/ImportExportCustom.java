@@ -19,33 +19,22 @@ public class ImportExportCustom implements IImportExport {
     }
 
     @Override
-    public List<Entity> importEntities(String sourcePath){
+    public List<Entity> importEntities(String sourcePath) throws Exception {
         CustomMapper objectMapper = new CustomMapper();
         List<Entity> entities = new ArrayList<>();
         String fileString = FileUtils.fileToString(sourcePath);
         if (!fileString.isEmpty()) {
-            try {
-                entities = objectMapper.readValueAsList(fileString);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (FormatException e){
-                e.printStackTrace();
-            }
+            entities = objectMapper.readValueAsList(fileString);
         }
         return entities;
     }
 
     @Override
-    public void exportEntities(String destinationPath, List<Entity> entities) {
-
+    public void exportEntities(String destinationPath, List<Entity> entities) throws Exception {
         CustomMapper objectMapper = new CustomMapper();
         String fileString = new String();
-        try {
-            fileString = objectMapper.writeValueAsString(entities);
-            FileUtils.stringToFile(destinationPath, fileString);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        fileString = objectMapper.writeValueAsString(entities);
+        FileUtils.stringToFile(destinationPath, fileString);
     }
 
 }

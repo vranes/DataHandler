@@ -23,9 +23,9 @@ public class AddButtonAction implements ActionListener {
 		JLabel lblId = new JLabel("ID:");
 		JLabel lblType = new JLabel("Type:");
 		JLabel lblAttribute = new JLabel("Attribute:");
-		JLabel lblNested = new JLabel("Nested:");
-		JLabel lblKey = new JLabel("Key:");
-		JLabel lblPC = new JLabel("Parenr/Child:");
+		JLabel lblNested = new JLabel("Nested ID:");
+		JLabel lblKey = new JLabel("Nested Key:");
+		JLabel lblPC = new JLabel("Parent");
 
 
 		JTextField jfId = new JTextField(5);
@@ -75,10 +75,17 @@ public class AddButtonAction implements ActionListener {
 			Map <String, Entity> nestedEntityMap = new HashMap <>();
 
 			if (jfId.isEnabled()) {
-				ent.setId(jfId.getText());
+				if(!jfId.getText().equals("")) ent.setId(jfId.getText());
+				else{
+					JOptionPane.showMessageDialog(MainFrame.getInstance(),"You can't create an entity without ID");
+					return;
+				}
 			} else ent.setId(MainFrame.getInstance().getAppCore().getOrderProvider().autoID());
 
-
+			if(jfType.getText().equals("")){
+				JOptionPane.showMessageDialog(MainFrame.getInstance(),"You can't create an entity without type");
+				return;
+			}
 			ent.setType(jfType.getText());
 
 
@@ -104,11 +111,11 @@ public class AddButtonAction implements ActionListener {
 				if(!jfNested.getText().equals("")){
 					if(!jcbNested.isSelected()){
 						try {
-							MainFrame.getInstance().getAppCore().getStorage().addnested(Database.getInstance().getPath()+
+							MainFrame.getInstance().getAppCore().getStorage().addNested(Database.getInstance().getPath()+
 									MainFrame.getInstance().getAppCore().getOrderProvider().locateInFile(
 											Crawler.getInstance().findById(jfNested.getText())),
 									ent, jfNested.getText(), jfKey.getText());
-						} catch (IdentifierException identifierException) {
+						} catch (Exception identifierException) {
 							JOptionPane.showMessageDialog(MainFrame.getInstance(),identifierException.getMessage());
 						}
 						MainFrame.getInstance().setJt(MainFrame.getInstance().getAppCore().loadTable(Database.getInstance().getEntities()));
@@ -132,7 +139,7 @@ public class AddButtonAction implements ActionListener {
 	public void tryAdd(Entity ent) {
 		try {
 			MainFrame.getInstance().getAppCore().getStorage().add(Database.getInstance().getPath(), ent);
-		} catch (IdentifierException e) {
+		} catch (Exception e) {
 			JOptionPane.showMessageDialog(MainFrame.getInstance(),e.getMessage());
 		}
 

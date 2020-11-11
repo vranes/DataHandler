@@ -15,11 +15,8 @@ public class SortButtonAction implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         JPanel mainPanel = new JPanel(new GridBagLayout());
-
         JLabel lblId = new JLabel("ID asc or desc:");
         JLabel lblType = new JLabel("Type asc or desc:");
-
-
         JPanel p = new JPanel(new FlowLayout());
         GridBagConstraints c = new GridBagConstraints();
         JTextField jfId = new JTextField(5);
@@ -42,7 +39,8 @@ public class SortButtonAction implements ActionListener {
         p.add(jcbType);
         ArrayList<Entity> ents = (ArrayList <Entity>) Database.getInstance().getEntities();
         mainPanel.add(p);
-        if( JOptionPane.showConfirmDialog(null,mainPanel,"Fill this form to delete",JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION)
+
+        if( JOptionPane.showConfirmDialog(null,mainPanel,"Fill this form to sort",JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION)
         {
             if(jcbId.isSelected() && jcbType.isSelected()) {
                 if(jcmbId.getSelectedItem().equals("Ascending") && jcmbType.getSelectedItem().equals("Ascending"))

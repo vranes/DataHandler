@@ -1,5 +1,6 @@
 package importexport;
 
+import Exceptions.FormatException;
 import model.Entity;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
@@ -27,38 +28,36 @@ public class ImportExportYaml implements IImportExport {
             instance = new ImportExportYaml();
         return instance;
     }
-/*
-    @Override
-    public String importFile(String sourcePath) {
-        String yamlString = FileUtils.fileToString(sourcePath);
-        return yamlString;
-    }*/
 
     @Override
-    public List<Entity> importEntities(String sourcePath) {
+    public List<Entity> importEntities(String sourcePath) throws Exception {
         List<Entity> entities = new ArrayList<>();
         String fileString = FileUtils.fileToString(sourcePath);
-
         if (!fileString.isEmpty()) {
-            entities = yaml.load(fileString);
+            try {
+                entities = yaml.load(fileString);
+                if (entities == null) throw new FormatException("Expected YAML format not found");
+                return entities;
+            }
+            catch (Exception e) {
+                throw new FormatException("Expected YAML format not found");
+            }
+        }
+        return entities;
+    }
+
+    @Override
+    public void exportEntities(String destinationPath, List <Entity> entities) throws Exception {
+        String fileString = new String();
+        try{
+            fileString = yaml.dump(entities);
+            if (fileString == null) throw new FormatException("Unexpected object format");
+        }
+        catch (Exception e) {
+            throw new FormatException("Unexpected object format");
         }
 
-        return entities;
-
-    }
-/*
-    @Override
-     public void exportFile(String destinationPath, String data) {
-        FileUtils.stringToFile(destinationPath, data);
-    } */
-
-    @Override
-    public void exportEntities(String destinationPath, List <Entity> entities) {
-        String fileString = new String();
-        fileString = yaml.dump(entities);
-
         FileUtils.stringToFile(destinationPath, fileString);
-
     }
 
 }

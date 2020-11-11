@@ -48,7 +48,6 @@ public class FilterButtonAction implements ActionListener{
 		JLabel lblType = new JLabel("Type:");
 		JLabel lblAttribute = new JLabel("Attribute:");
 
-
 		JPanel p = new JPanel(new FlowLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		JTextField jfId = new JTextField(5);
@@ -99,7 +98,7 @@ public class FilterButtonAction implements ActionListener{
 
 		mainPanel.add(p);
 
-		if( JOptionPane.showConfirmDialog(null,mainPanel,"Fill this form to delete",JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION)
+		if( JOptionPane.showConfirmDialog(null,mainPanel,"Fill this form to filter",JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION)
 		{
 			String idToFilter = ((JTextField)(p.getComponent(1))).getText();
 			String typeToFilter = ((JTextField)(p.getComponent(3))).getText();
@@ -145,8 +144,6 @@ public class FilterButtonAction implements ActionListener{
 					toFilter = checkNested(jfNested.getText(), toFilter);
 				}
 				else if(typeFlag == 0 && attrFlag == 1  && nestedFlag == 1){
-
-
 					toFilter = Database.getInstance().getEntities();
 					toFilter = checkAttribute(attributesMap,toFilter);
 					toFilter = checkValue(attributesMap,toFilter);
@@ -161,16 +158,14 @@ public class FilterButtonAction implements ActionListener{
 					toFilter = checkNested(jfNested.getText(), Database.getInstance().getEntities());
 				}
 				else if(typeFlag == 0 && attrFlag == 0 && nestedFlag == 0){
-					JOptionPane.showMessageDialog(MainFrame.getInstance(),"Nista nije odabrano za brisanje");
+					JOptionPane.showMessageDialog(MainFrame.getInstance(),"Nista nije odabrano za filtriranje");
 				}
 			}
-
 			if(!toFilter.isEmpty() )
 				MainFrame.getInstance().setJt(MainFrame.getInstance().getAppCore().loadTable(toFilter));
 		}
-
-
 	}
+
 	public List<Entity> checkNested(String nested, List<Entity> toFilter){
 		String[] res = nested.split("[,]", 0);
 

@@ -11,10 +11,10 @@ public interface IImportExport {
     /**
      * Returns a list of all entities from a file
      */
-    List<Entity> importEntities (String sourcePath);
+    List<Entity> importEntities (String sourcePath) throws Exception;
     /**
      * Writes the formatted string representation of the passed entities list to the file
      */
-    void exportEntities (String destinationPath, List<Entity> entities);
+    void exportEntities (String destinationPath, List<Entity> entities) throws Exception ;
 
 }

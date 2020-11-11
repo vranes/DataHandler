@@ -1,12 +1,7 @@
 package service;
 
-import model.Entity;
-import org.yaml.snakeyaml.TypeDescription;
+import Exceptions.FormatException;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class ObjectConverterYaml implements IObjectConverter {
 
@@ -20,30 +15,26 @@ public class ObjectConverterYaml implements IObjectConverter {
     }
 
     @Override
-    public String objectToFormat(Object object) throws Exception {
-        return yaml.dump(object);
+    public String objectToFormat(Object object) throws FormatException {
+        try{
+            String s = yaml.dump(object);
+            if (s == null) throw new FormatException("Unexpected object format");
+            return s;
+        }
+        catch (Exception e) {
+            throw new FormatException("Unexpected object format");
+        }
     }
 
     @Override
-    public Object formatToObject(String entity, Class<?> classOf) throws Exception {
-        return  yaml.loadAs(entity, classOf);
+    public Object formatToObject(String entity, Class<?> classOf) throws FormatException {
+        try {
+            Object o = yaml.loadAs(entity, classOf);
+            if (o == null) throw new FormatException("Expected YAML format not found");
+            return o;
+        }
+        catch (Exception e) {
+            throw new FormatException("Expected YAML format not found");
+        }
     }
 }
-
-/*
-    @Override
-    public String objectToFormat(Object object) throws Exception {
-        String jsonString = gson.toJson(object);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-        JsonNode tree = objectMapper.readTree(jsonString);
-        String formattedJson = objectMapper.writeValueAsString(tree);
-
-        return formattedJson;
-    }
-
-    @Override
-    public Object formatToObject(String json, Class<?> classOf) throws Exception {
-        return gson.fromJson(json, classOf);
-    }*/
