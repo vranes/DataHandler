@@ -45,15 +45,6 @@ public class AddButtonAction implements ActionListener {
 			}
 		});
 
-		jcbNested.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (jfKey.isEnabled()) {
-					jfKey.setEnabled(false);
-				} else jfKey.setEnabled(true);
-			}
-		});
-
 		p.add(lblAutoId);
 		p.add(jcbID);
 		p.add(lblId);
@@ -86,6 +77,14 @@ public class AddButtonAction implements ActionListener {
 				JOptionPane.showMessageDialog(MainFrame.getInstance(),"You can't create an entity without type");
 				return;
 			}
+			if(jfKey.getText().equals("") && !jfNested.getText().equals("")){
+				JOptionPane.showMessageDialog(MainFrame.getInstance(),"Cant nest without Key");
+				return;
+			}
+			if(!jfKey.getText().equals("") && jfNested.getText().equals("")){
+				JOptionPane.showMessageDialog(MainFrame.getInstance(),"Cant nest without Nested ID");
+				return;
+			}
 			ent.setType(jfType.getText());
 
 
@@ -96,6 +95,10 @@ public class AddButtonAction implements ActionListener {
 				int k = 0;
 				for (String myStr : res) {
 					String[] kv = res[k].split("[.]", 0);
+					if(kv.length == 0 || kv.length == 1) {
+						JOptionPane.showMessageDialog(MainFrame.getInstance(),"Bad Input try : Key.Value,Key1.Value1");
+						return;
+					}
 					if (kv[1].contains("*")) ent.addAttribute(kv[0], "");
 					else ent.addAttribute(kv[0], kv[1]);
 					k++;
@@ -123,7 +126,7 @@ public class AddButtonAction implements ActionListener {
 					}
 				}
 				if (et.getId().contains(jfNested.getText())) {
-					nestedEntityMap.put(et.getId(), et);
+					nestedEntityMap.put(jfKey.getText(), et);
 					ent.setNestedEntities(nestedEntityMap);
 					break;
 				}

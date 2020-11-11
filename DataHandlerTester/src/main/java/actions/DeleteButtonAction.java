@@ -87,6 +87,10 @@ public class DeleteButtonAction implements ActionListener {
                 int k = 0;
                 for (String myStr : res) {
                     String[] kv = res[k].split("[.]", 0);
+                    if(kv.length == 0 || kv.length == 1) {
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(),"Bad Input try : Key.Value,Key1.Value1");
+                        return;
+                    }
                     if (kv[1].contains("*")) attributesMap.put(kv[0], " ");
                     else attributesMap.put(kv[0], kv[1]);
                     k++;

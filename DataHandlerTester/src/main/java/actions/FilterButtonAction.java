@@ -1,41 +1,19 @@
 package actions;
 
-import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import model.Database;
+import model.Entity;
+import view.frame.MainFrame;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JViewport;
-import javax.swing.SpringLayout;
-import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
-import Exceptions.IdentifierException;
-import model.Entity;
-import model.Database;
-import start.AppCore;
-import start.Main;
-import view.frame.MainFrame;
 
 public class FilterButtonAction implements ActionListener{
 
@@ -110,6 +88,10 @@ public class FilterButtonAction implements ActionListener{
 				int k = 0;
 				for (String myStr : res) {
 					String[] kv = res[k].split("[.]", 0);
+					if(kv.length == 0 || kv.length == 1) {
+						JOptionPane.showMessageDialog(MainFrame.getInstance(),"Bad Input try : Key.Value,Key1.Value1");
+						return;
+					}
 					if (kv[1].contains("*")) attributesMap.put(kv[0], " ");
 					else attributesMap.put(kv[0], kv[1]);
 					k++;
@@ -136,26 +118,27 @@ public class FilterButtonAction implements ActionListener{
 				if(!jfNested.getText().equals("")) nestedFlag = 1;
 
 				if(typeFlag == 1 && attrFlag == 1 && nestedFlag == 1){
-
-
 					toFilter = MainFrame.getInstance().getAppCore().getCrawler().findByType(typeToFilter);
 					toFilter = checkAttribute(attributesMap,toFilter);
 					toFilter = checkValue(attributesMap,toFilter);
 					toFilter = checkNested(jfNested.getText(), toFilter);
+					if(toFilter == null) return;
 				}
 				else if(typeFlag == 0 && attrFlag == 1  && nestedFlag == 1){
 					toFilter = Database.getInstance().getEntities();
 					toFilter = checkAttribute(attributesMap,toFilter);
 					toFilter = checkValue(attributesMap,toFilter);
 					toFilter = checkNested(jfNested.getText(), toFilter);
+					if(toFilter == null) return;
 				}
 				else if(typeFlag == 1 && attrFlag == 0 && nestedFlag == 1){
 					toFilter = MainFrame.getInstance().getAppCore().getCrawler().findByType(typeToFilter);
 					toFilter = checkNested(jfNested.getText(), toFilter);
-
+					if(toFilter == null) return;
 				}
 				else if(typeFlag == 0 && attrFlag == 0 && nestedFlag == 1){
 					toFilter = checkNested(jfNested.getText(), Database.getInstance().getEntities());
+					if(toFilter == null) return;
 				}
 				else if(typeFlag == 0 && attrFlag == 0 && nestedFlag == 0){
 					JOptionPane.showMessageDialog(MainFrame.getInstance(),"Nista nije odabrano za filtriranje");
@@ -173,6 +156,10 @@ public class FilterButtonAction implements ActionListener{
 			int k = 0;
 			for (String myStr : res) {
 				String[] kv = res[k].split("[.]", 0);
+				if(kv.length <= 2) {
+					JOptionPane.showMessageDialog(MainFrame.getInstance(),"Bad Input try : NestedKey.Attribute.Value");
+					return null;
+				}
 				String parentKey = kv[0];
 				String childKey = kv[1];
 				String childValue = kv[2];
