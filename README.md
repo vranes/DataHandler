@@ -6,4 +6,5 @@ Project contains 5 modules - specification, three implementations (JSON, YAML an
 All CRUD operations are supported.
 
 Parsing JSON and YAML done with Jackson libraries.
+
 Build and dependency management done with Maven.
